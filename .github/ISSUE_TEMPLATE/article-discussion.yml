@@ -1,0 +1,41 @@
+name: 文章讨论
+description: 围绕某篇公开文章进行提问、反馈、勘误或实践分享
+title: "[Article] "
+labels: ["article"]
+body:
+  - type: input
+    id: article
+    attributes:
+      label: 文章
+      description: 请填写文章标题或链接。
+      placeholder: 从 LLM Wiki 到个人 Harness
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: 反馈类型
+      options:
+        - 问题
+        - 勘误
+        - 实践反馈
+        - 补充案例
+        - 后续选题
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: 内容
+      description: 请描述你的问题、反馈或实践情况。
+      placeholder: 我在自己的知识库里尝试到这一步时遇到了...
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: 背景信息
+      description: 可选。你的使用场景、工具栈、相关链接或截图。
+    validations:
+      required: false
+
