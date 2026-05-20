@@ -8,8 +8,8 @@ tags: [llm-wiki, knowledge-management, agent-engineering, harness, mind-os, karp
 origin:
   private_path: raw/publish/2026-05-19-from-llm-wiki-to-personal-harness.md
 discussion:
-  issue:
-  url:
+  issue: 1
+  url: https://github.com/zhlkkk/mind-os-public/issues/1
 formats:
   html: /articles/from-llm-wiki-to-personal-harness
   slides:
