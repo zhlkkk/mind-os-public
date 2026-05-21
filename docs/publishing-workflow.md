@@ -85,6 +85,7 @@ MIND_OS_PUBLISH_SOURCE=/path/to/mind-os/raw/publish ruby scripts/sync_content.rb
 read raw/publish/*.md
   → strip private-only fields
   → convert Obsidian links
+  → copy referenced public assets
   → write content/articles/*.md
 ```
 
@@ -93,8 +94,10 @@ read raw/publish/*.md
 - 目录同步默认跳过 `status: draft` 的母稿。
 - 单文件同步视为人工明确指定，会生成 `status: ready` 的公开文章。
 - 公开 frontmatter 只保留内容协议需要的字段，并写入 `origin.private_path`。
-- 普通 Obsidian wikilink 会转成公开文本；Obsidian 图片引用会转成“公开版暂未同步图片”的文本提示。
-- Issue 创建、Issue 回填和公开资源复制仍需后续流程处理。
+- 普通 Obsidian wikilink 会转成公开文本。
+- Obsidian 图片引用会复制到 `content/assets/articles/<slug>/`，正文改写为相对 Markdown 图片链接。
+- 再次同步会保留公开文章中已经存在的 `discussion.issue` 和 `discussion.url`。
+- Issue 创建、Issue 回填和非图片公开资源复制仍需后续流程处理。
 
 自动化脚本必须默认保守：发现无法判断是否安全公开的内容时中断，而不是继续发布。
 

@@ -1,3 +1,4 @@
+require "base64"
 require "fileutils"
 require "tmpdir"
 require "minitest/autorun"
@@ -8,8 +9,10 @@ class SyncContentTest < Minitest::Test
   def setup
     @tmpdir = Dir.mktmpdir
     @source_root = File.join(@tmpdir, "private", "raw", "publish")
+    @asset_root = File.join(@tmpdir, "private", "raw", "assets")
     @dest_root = File.join(@tmpdir, "public", "content", "articles")
     FileUtils.mkdir_p(@source_root)
+    FileUtils.mkdir_p(@asset_root)
   end
 
   def teardown
@@ -36,6 +39,7 @@ class SyncContentTest < Minitest::Test
 
       ![[private-image.png]]
     MARKDOWN
+    write_png(File.join(@asset_root, "private-image.png"))
 
     result = ContentSync.sync_file(source_path, @dest_root)
 
@@ -48,11 +52,84 @@ class SyncContentTest < Minitest::Test
     assert_includes output, "formats:"
     assert_includes output, "  html: /articles/example-note"
     assert_includes output, "参考 rag-vs-llm-wiki 和 Distill。"
+    assert_includes output, "![private-image.png](../assets/articles/example-note/private-image.png)"
     refute_includes output, "author:"
     refute_includes output, "source:"
     refute_includes output, "[["
     refute_includes output, "![["
+    assert File.exist?(File.join(@tmpdir, "public", "content", "assets", "articles", "example-note", "private-image.png"))
     assert_equal File.join(@dest_root, "2026-05-19-example-note.md"), result.output_path
+  end
+
+  def test_syncs_nested_raw_publish_asset_references
+    source_path = File.join(@source_root, "2026-05-19-asset-note.md")
+    nested_asset = File.join(@source_root, "assets", "2026-05-19", "diagram.png")
+    FileUtils.mkdir_p(File.dirname(nested_asset))
+    write_png(nested_asset)
+
+    File.write(source_path, <<~MARKDOWN)
+      ---
+      title: Asset Note
+      date: 2026-05-19
+      status: ready
+      tags: [mind-os]
+      ---
+
+      # Asset Note
+
+      ![[raw/publish/assets/2026-05-19/diagram.png]]
+    MARKDOWN
+
+    result = ContentSync.sync_file(source_path, @dest_root)
+    output = File.read(result.output_path)
+
+    assert_includes output, "![diagram.png](../assets/articles/asset-note/diagram.png)"
+    assert File.exist?(File.join(@tmpdir, "public", "content", "assets", "articles", "asset-note", "diagram.png"))
+  end
+
+  def test_sync_preserves_existing_discussion_binding
+    source_path = File.join(@source_root, "2026-05-19-bound-note.md")
+    File.write(source_path, <<~MARKDOWN)
+      ---
+      title: Bound Note
+      date: 2026-05-19
+      status: ready
+      tags: [mind-os]
+      ---
+
+      # Bound Note
+
+      Bound body.
+    MARKDOWN
+
+    FileUtils.mkdir_p(@dest_root)
+    File.write(File.join(@dest_root, "2026-05-19-bound-note.md"), <<~MARKDOWN)
+      ---
+      title: Bound Note
+      slug: bound-note
+      date: 2026-05-19
+      status: ready
+      summary: Old summary.
+      tags: [mind-os]
+      origin:
+        private_path: raw/publish/2026-05-19-bound-note.md
+      discussion:
+        issue: 1
+        url: https://github.com/zhlkkk/mind-os-public/issues/1
+      formats:
+        html: /articles/bound-note
+        slides:
+        video:
+      ---
+
+      # Bound Note
+    MARKDOWN
+
+    result = ContentSync.sync_file(source_path, @dest_root)
+    output = File.read(result.output_path)
+
+    assert_includes output, "  issue: 1"
+    assert_includes output, "  url: https://github.com/zhlkkk/mind-os-public/issues/1"
   end
 
   def test_directory_sync_skips_drafts_by_default
@@ -105,5 +182,13 @@ class SyncContentTest < Minitest::Test
     assert File.exist?(File.join(@dest_root, "2026-05-19-ready-note.md"))
     refute File.exist?(File.join(@dest_root, "2026-05-20-draft-note.md"))
     refute File.exist?(File.join(@dest_root, "2026-05-21-archived-note.md"))
+  end
+
+  private
+
+  def write_png(path)
+    FileUtils.mkdir_p(File.dirname(path))
+    png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+    File.binwrite(path, Base64.decode64(png))
   end
 end

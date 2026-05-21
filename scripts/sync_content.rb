@@ -14,9 +14,10 @@ module ContentSync
     article = read_article(source_path)
     slug = public_slug(article, source_path)
     output_path = File.join(dest_root, File.basename(source_path))
+    existing_article = File.exist?(output_path) ? read_article(output_path) : nil
 
     FileUtils.mkdir_p(dest_root)
-    File.write(output_path, public_markdown(article, source_path, slug))
+    File.write(output_path, public_markdown(article, source_path, slug, dest_root, existing_article))
 
     SyncResult.new(source_path: source_path, output_path: output_path)
   end
@@ -41,10 +42,11 @@ module ContentSync
     { "frontmatter" => frontmatter, "body" => body }
   end
 
-  def public_markdown(article, source_path, slug)
+  def public_markdown(article, source_path, slug, dest_root, existing_article = nil)
     frontmatter = article.fetch("frontmatter")
-    body = normalize_body(article.fetch("body"))
+    body = normalize_body(article.fetch("body"), source_path, slug, dest_root)
     summary = public_summary(frontmatter, body)
+    discussion = existing_article&.fetch("frontmatter", {})&.fetch("discussion", nil) || frontmatter.fetch("discussion", {})
 
     [
       "---",
@@ -57,8 +59,8 @@ module ContentSync
       "origin:",
       "  private_path: #{private_path(source_path)}",
       "discussion:",
-      "  issue:",
-      "  url:",
+      "  issue: #{discussion_value(discussion, "issue")}",
+      "  url: #{discussion_value(discussion, "url")}",
       "formats:",
       "  html: /articles/#{slug}",
       "  slides:",
@@ -70,11 +72,58 @@ module ContentSync
     ].join("\n")
   end
 
-  def normalize_body(body)
+  def normalize_body(body, source_path, slug, dest_root)
     body
-      .gsub(/!\[\[([^\]]+)\]\]/, "> 公开版暂未同步图片：`\\1`")
+      .gsub(/!\[\[([^\]]+)\]\]/) { public_image_link(source_path, slug, dest_root, Regexp.last_match(1)) }
       .gsub(/\[\[([^\]|\n]+)\|([^\]\n]+)\]\]/, "\\2")
       .gsub(/\[\[([^\]\n]+)\]\]/, "\\1")
+  end
+
+  def public_image_link(source_path, slug, dest_root, target)
+    source_asset_path = resolve_asset_path(source_path, target)
+    raise "missing asset for #{target}" unless source_asset_path
+
+    assets_root = File.expand_path("../assets", dest_root)
+    filename = File.basename(target)
+    output_path = File.join(assets_root, "articles", slug, filename)
+    copy_public_asset(source_asset_path, output_path)
+
+    "![#{filename}](../assets/articles/#{slug}/#{url_path(filename)})"
+  end
+
+  def resolve_asset_path(source_path, target)
+    vault_root = source_path.tr("\\", "/").sub(%r{/raw/publish/.*\z}, "")
+    candidates = [
+      File.join(vault_root, target),
+      File.join(File.dirname(source_path), target),
+      File.join(vault_root, "raw", "assets", target),
+      File.join(vault_root, "raw", "assets", File.basename(target)),
+    ]
+
+    candidates.find { |candidate| File.file?(candidate) }
+  end
+
+  def copy_public_asset(source_path, output_path)
+    FileUtils.mkdir_p(File.dirname(output_path))
+
+    if raster_image?(output_path)
+      sanitize_raster_image(source_path, output_path)
+    else
+      FileUtils.cp(source_path, output_path)
+    end
+  end
+
+  def sanitize_raster_image(source_path, output_path)
+    sips = `which sips`.strip
+    raise "sips is required to sanitize image assets" if sips.empty?
+
+    format = File.extname(output_path).downcase == ".png" ? "png" : "jpeg"
+    ok = system(sips, "-s", "format", format, source_path, "--out", output_path, out: File::NULL, err: File::NULL)
+    raise "failed to sanitize image asset: #{source_path}" unless ok
+  end
+
+  def raster_image?(path)
+    %w[.jpg .jpeg .png].include?(File.extname(path).downcase)
   end
 
   def public_slug(article, source_path)
@@ -117,6 +166,14 @@ module ContentSync
 
   def inline_array(values)
     "[#{Array(values).join(", ")}]"
+  end
+
+  def discussion_value(discussion, key)
+    discussion && discussion[key] ? discussion[key] : nil
+  end
+
+  def url_path(value)
+    value.gsub(" ", "%20")
   end
 end
 
