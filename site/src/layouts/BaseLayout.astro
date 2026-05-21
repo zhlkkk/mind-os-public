@@ -1,0 +1,44 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Mind-OS Public 是个人知识系统的公开发布层。" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="/">
+          <span class="brand-mark">M</span>
+          <span>
+            <strong>Mind-OS Public</strong>
+            <small>公开知识发布层</small>
+          </span>
+        </a>
+        <nav aria-label="主导航">
+          <a href="/">文章</a>
+          <a href="https://github.com/zhlkkk/mind-os-public/issues">讨论</a>
+          <a href="https://github.com/zhlkkk/mind-os-public">GitHub</a>
+        </nav>
+      </header>
+      <main>
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

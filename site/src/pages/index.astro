@@ -1,0 +1,58 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getArticles, getTags } from "@/lib/content";
+
+const articles = getArticles();
+const tags = getTags();
+const featured = articles[0];
+---
+
+<BaseLayout title="Mind-OS Public" description="Mind-OS 公开文章、讨论和知识工作流记录。">
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Public knowledge layer</p>
+      <h1>把个人知识系统里想清楚的部分，发布成可以被讨论和复用的文章。</h1>
+      <p class="lead">
+        这里不是私人 vault 的镜像，而是经过筛选、脱敏和整理后的公开内容层。正文保留在 Markdown，讨论沉淀到 GitHub Issues。
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href={featured ? `/articles/${featured.frontmatter.slug}` : "#articles"}>阅读最新文章</a>
+        <a class="button secondary" href="https://github.com/zhlkkk/mind-os-public/issues">参与讨论</a>
+      </div>
+    </div>
+    <div class="hero-panel" aria-label="内容流示意">
+      <div class="flow-node warm">raw/publish</div>
+      <div class="flow-line"></div>
+      <div class="flow-node coral">content/articles</div>
+      <div class="flow-line"></div>
+      <div class="flow-node teal">GitHub Issues</div>
+      <p>脱敏、同步、绑定讨论线程，让正文和反馈各司其职。</p>
+    </div>
+  </section>
+
+  <section class="section-band" id="articles">
+    <div class="section-heading">
+      <p class="eyebrow">Articles</p>
+      <h2>最新公开内容</h2>
+    </div>
+    <div class="article-list">
+      {articles.map((article) => (
+        <a class="article-row" href={`/articles/${article.frontmatter.slug}`}>
+          <span class="date">{article.frontmatter.date}</span>
+          <span class="article-main">
+            <strong>{article.frontmatter.title}</strong>
+            <small>{article.frontmatter.summary}</small>
+          </span>
+          <span class="read-time">{article.readingMinutes} 分钟</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="tag-cloud" aria-label="主题标签">
+    <p class="eyebrow">Signals</p>
+    <div>
+      {tags.map((tag, index) => <span class={`tag tone-${(index % 5) + 1}`}>{tag}</span>)}
+    </div>
+  </section>
+</BaseLayout>

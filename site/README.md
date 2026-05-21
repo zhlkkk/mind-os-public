@@ -1,40 +1,56 @@
 # 前端项目说明
 
-`site/` 是未来的前端渲染项目目录。
-
-当前阶段先保留为空壳，等内容协议和第一篇真实文章稳定后再实现。
+`site/` 是 Mind-OS Public 的 Astro 静态站点。
 
 ## 第一版目标
 
-第一版前端只做可读的公开文章站：
+第一版前端只做可读、适合分享的公开文章站：
 
 - 首页展示文章列表。
 - 文章页渲染 Markdown。
-- 支持 Mermaid 图。
 - 展示日期、标签和摘要。
 - 提供 GitHub Issue 讨论入口。
 - 部署为静态站点。
+- 复制 `content/assets/` 到站点公开资源目录。
 
-## 建议技术路线
+## 本地开发
 
-优先选择静态生成方案，避免第一阶段引入后端。
+```bash
+npm install
+npm run dev
+```
 
-候选：
+默认本地地址：
 
-- Astro：适合内容站，Markdown 支持自然，静态输出简单。
-- Next.js：适合未来扩展交互，但第一阶段复杂度稍高。
-- Vite + 自定义 Markdown 构建：最轻，但内容功能需要自己补。
+```text
+http://127.0.0.1:4321/
+```
 
-当前推荐 Astro，因为它最贴合“内容源文件 → HTML 页面”的产品形态。
+## 构建
 
-## 前端读取的数据
+```bash
+npm run build
+```
+
+构建会先执行 `scripts/sync-assets.mjs`，将仓库根目录的 `content/assets/` 同步到 `site/public/assets/`。
+
+GitHub Pages 构建会设置 `GITHUB_PAGES=true`，站点发布到：
+
+```text
+https://zhlkkk.github.io/mind-os-public/
+```
+
+## 内容读取
 
 前端只读取公开仓库内的数据：
 
 ```text
-content/articles/*.md
-content/assets/**
+../content/articles/*.md
+../content/assets/**
 ```
 
 前端不读取私人 vault，也不依赖本机绝对路径。
 
+## 设计方向
+
+视觉基调是暖色的个人知识杂志：米白纸张、琥珀、陶土与橄榄作为底色，辅以青绿、蓝色和玫红突出标签、讨论入口和结构节点。
