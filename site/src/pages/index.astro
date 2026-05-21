@@ -5,6 +5,8 @@ import { getArticles, getTags } from "@/lib/content";
 const articles = getArticles();
 const tags = getTags();
 const featured = articles[0];
+const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const articleHref = (slug: string) => `${base}articles/${slug}`;
 ---
 
 <BaseLayout title="Mind-OS Public" description="Mind-OS 公开文章、讨论和知识工作流记录。">
@@ -16,7 +18,7 @@ const featured = articles[0];
         这里不是私人 vault 的镜像，而是经过筛选、脱敏和整理后的公开内容层。正文保留在 Markdown，讨论沉淀到 GitHub Issues。
       </p>
       <div class="hero-actions">
-        <a class="button primary" href={featured ? `/articles/${featured.frontmatter.slug}` : "#articles"}>阅读最新文章</a>
+        <a class="button primary" href={featured ? articleHref(featured.frontmatter.slug) : "#articles"}>阅读最新文章</a>
         <a class="button secondary" href="https://github.com/zhlkkk/mind-os-public/issues">参与讨论</a>
       </div>
     </div>
@@ -37,7 +39,7 @@ const featured = articles[0];
     </div>
     <div class="article-list">
       {articles.map((article) => (
-        <a class="article-row" href={`/articles/${article.frontmatter.slug}`}>
+        <a class="article-row" href={articleHref(article.frontmatter.slug)}>
           <span class="date">{article.frontmatter.date}</span>
           <span class="article-main">
             <strong>{article.frontmatter.title}</strong>
