@@ -27,6 +27,8 @@ async function withAssetSyncLock(task) {
 async function acquireLock() {
   const startedAt = Date.now();
 
+  await mkdir(dirname(lockDir), { recursive: true });
+
   while (true) {
     try {
       await mkdir(lockDir);
