@@ -553,6 +553,7 @@ h2 {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  table-layout: auto;
 }
 
 .article-content th,
@@ -567,6 +568,17 @@ h2 {
   font-family: var(--mono);
   font-size: 12px;
   text-align: left;
+}
+
+.article-content th:nth-child(-n + 2),
+.article-content td:nth-child(-n + 2) {
+  min-width: 150px;
+  white-space: nowrap;
+}
+
+.article-content th:nth-child(3),
+.article-content td:nth-child(3) {
+  white-space: normal;
 }
 
 @media (max-width: 960px) {
