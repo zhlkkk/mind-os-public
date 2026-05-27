@@ -551,6 +551,7 @@ h2 {
 
 .article-content table {
   width: 100%;
+  max-width: 100%;
   border-collapse: collapse;
   font-size: 14px;
   table-layout: auto;
@@ -579,6 +580,7 @@ h2 {
 .article-content th:nth-child(3),
 .article-content td:nth-child(3) {
   white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 960px) {
@@ -641,5 +643,30 @@ h2 {
   .article-content {
     padding: 28px 18px;
     font-size: 15px;
+  }
+
+  .article-content table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .article-content th,
+  .article-content td {
+    padding: 10px;
+  }
+
+  .article-content th:nth-child(-n + 2),
+  .article-content td:nth-child(-n + 2) {
+    min-width: max-content;
+    white-space: nowrap;
+  }
+
+  .article-content th:nth-child(3),
+  .article-content td:nth-child(3) {
+    min-width: 280px;
+    white-space: normal;
   }
 }
