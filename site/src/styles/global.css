@@ -583,43 +583,6 @@ h2 {
   overflow-wrap: anywhere;
 }
 
-.article-data-list {
-  display: grid;
-  gap: 12px;
-  margin: 1.25em 0;
-}
-
-.article-data-card {
-  margin: 0;
-  padding: 14px 16px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 253, 250, 0.74);
-}
-
-.article-data-item {
-  padding: 10px 0;
-  border-bottom: 1px dashed var(--line-soft);
-}
-
-.article-data-item:last-child {
-  border-bottom: 0;
-}
-
-.article-data-label {
-  margin-bottom: 4px;
-  color: var(--espresso);
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.article-data-value {
-  color: var(--ink-soft);
-  line-height: 1.75;
-  overflow-wrap: anywhere;
-}
-
 @media (max-width: 960px) {
   .hero {
     grid-template-columns: 1fr;
@@ -682,64 +645,20 @@ h2 {
     font-size: 15px;
   }
 
-  .article-data-list {
-    gap: 14px;
-  }
-
-  .article-data-card {
-    padding: 12px 14px;
-  }
-
   .article-content table {
-    display: block;
     width: 100%;
-    overflow: visible;
+    table-layout: fixed;
     font-size: 13px;
   }
 
-  .article-content thead {
-    display: none;
-  }
-
-  .article-content tbody,
-  .article-content tr,
-  .article-content td {
-    display: block;
-  }
-
-  .article-content tr {
-    margin: 14px 0;
-    padding: 10px 12px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: rgba(255, 253, 250, 0.72);
-  }
-
+  .article-content th,
   .article-content td,
   .article-content td:nth-child(-n + 2),
   .article-content td:nth-child(3) {
     min-width: 0;
-    padding: 9px 0;
-    border-bottom: 1px dashed var(--line-soft);
+    padding: 7px 5px;
     white-space: normal;
-    overflow-wrap: anywhere;
-  }
-
-  .article-content td:last-child {
-    border-bottom: 0;
-  }
-
-  .article-content td:empty {
-    display: none;
-  }
-
-  .article-content td::before {
-    content: attr(data-label);
-    display: block;
-    margin-bottom: 3px;
-    color: var(--espresso);
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 700;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
 }

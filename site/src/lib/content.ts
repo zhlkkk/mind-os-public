@@ -152,13 +152,13 @@ function enhanceTables(html: string): string {
   return html.replace(/<table>[\s\S]*?<\/table>/g, (table) => {
     const headerMatch = table.match(/<thead>\s*<tr>([\s\S]*?)<\/tr>\s*<\/thead>/);
     const bodyMatch = table.match(/<tbody>([\s\S]*?)<\/tbody>/);
-    if (!headerMatch) return table;
+    if (!headerMatch || !bodyMatch) return table;
 
     const headers = Array.from(headerMatch[1].matchAll(/<th[^>]*>([\s\S]*?)<\/th>/g)).map((match) =>
-      escapeHtml(stripHtml(match[1]).trim()),
+      match[1].trim(),
     );
 
-    if (!headers.length || !bodyMatch) return table;
+    if (!headers.length) return table;
 
     const rows = Array.from(bodyMatch[1].matchAll(/<tr>([\s\S]*?)<\/tr>/g))
       .map((rowMatch) =>
@@ -168,28 +168,39 @@ function enhanceTables(html: string): string {
 
     if (!rows.length) return table;
 
-    const cards = rows
-      .map((cells) => {
-        const items = cells
-          .map((cell, index) => {
-            if (stripHtml(cell).trim() === "") return "";
+    const columnWidths = getColumnWidths(headers.length);
+    const colgroup = columnWidths.map((width) => `<col style="width:${width}%;">`).join("");
+    const tableStyle =
+      "width:100%;table-layout:fixed;border-collapse:collapse;margin:18px 0;color:#27231f;font-size:14px;line-height:1.65;";
+    const headerStyle =
+      "padding:8px 6px;border:1px solid #ddd7cf;background:#f0eeeb;color:#1f1c18;font-weight:700;text-align:center;vertical-align:middle;word-break:normal;overflow-wrap:break-word;";
+    const cellStyle =
+      "padding:8px 6px;border:1px solid #ddd7cf;text-align:center;vertical-align:middle;word-break:normal;overflow-wrap:break-word;";
 
-            const label = headers[index] ?? `第 ${index + 1} 列`;
-            return [
-              '<div class="article-data-item" style="padding:10px 0;border-bottom:1px dashed rgba(31,29,26,.1);">',
-              `<div class="article-data-label" style="margin-bottom:4px;color:#65452f;font-size:12px;font-weight:700;">${label}</div>`,
-              `<div class="article-data-value" style="color:#3f3a34;line-height:1.75;word-break:break-word;overflow-wrap:anywhere;">${cell}</div>`,
-              "</div>",
-            ].join("");
-          })
+    const headerHtml = headers
+      .map((header) => `<th style="${headerStyle}">${header}</th>`)
+      .join("");
+
+    const bodyHtml = rows
+      .map((cells) => {
+        const cellHtml = headers
+          .map((_, index) => `<td data-label="${escapeHtml(stripHtml(headers[index] ?? ""))}" style="${cellStyle}">${cells[index] ?? ""}</td>`)
           .join("");
 
-        return `<section class="article-data-card" style="margin:14px 0;padding:12px 14px;border:1px solid #dfd3bf;border-radius:8px;background:rgba(255,253,250,.74);">${items}</section>`;
+        return `<tr>${cellHtml}</tr>`;
       })
       .join("");
 
-    return `<div class="article-data-list">${cards}</div>`;
+    return `<table style="${tableStyle}"><colgroup>${colgroup}</colgroup><thead><tr>${headerHtml}</tr></thead><tbody>${bodyHtml}</tbody></table>`;
   });
+}
+
+function getColumnWidths(columnCount: number): number[] {
+  if (columnCount === 2) return [34, 66];
+  if (columnCount === 3) return [22, 30, 48];
+  if (columnCount === 4) return [18, 22, 16, 44];
+
+  return Array.from({ length: columnCount }, () => Math.floor(100 / columnCount));
 }
 
 function stripHtml(value: string): string {
