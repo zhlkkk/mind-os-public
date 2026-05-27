@@ -173,18 +173,21 @@ function enhanceTables(html: string): string {
     const tableStyle =
       "width:100%;table-layout:fixed;border-collapse:collapse;margin:18px 0;color:#27231f;font-size:14px;line-height:1.65;";
     const headerStyle =
-      "padding:8px 6px;border:1px solid #ddd7cf;background:#f0eeeb;color:#1f1c18;font-weight:700;text-align:center;vertical-align:middle;word-break:normal;overflow-wrap:break-word;";
+      "padding:8px 6px;border:1px solid #ddd7cf;background:#f0eeeb;color:#1f1c18;font-weight:700;text-align:center;vertical-align:middle;white-space:normal;word-break:break-all;overflow-wrap:anywhere;";
     const cellStyle =
-      "padding:8px 6px;border:1px solid #ddd7cf;text-align:center;vertical-align:middle;word-break:normal;overflow-wrap:break-word;";
+      "padding:8px 6px;border:1px solid #ddd7cf;text-align:center;vertical-align:middle;white-space:normal;word-break:break-all;overflow-wrap:anywhere;";
 
     const headerHtml = headers
-      .map((header) => `<th style="${headerStyle}">${header}</th>`)
+      .map((header, index) => `<th style="width:${columnWidths[index]}%;${headerStyle}">${header}</th>`)
       .join("");
 
     const bodyHtml = rows
       .map((cells) => {
         const cellHtml = headers
-          .map((_, index) => `<td data-label="${escapeHtml(stripHtml(headers[index] ?? ""))}" style="${cellStyle}">${cells[index] ?? ""}</td>`)
+          .map(
+            (_, index) =>
+              `<td data-label="${escapeHtml(stripHtml(headers[index] ?? ""))}" style="width:${columnWidths[index]}%;${cellStyle}">${cells[index] ?? ""}</td>`,
+          )
           .join("");
 
         return `<tr>${cellHtml}</tr>`;
@@ -197,7 +200,7 @@ function enhanceTables(html: string): string {
 
 function getColumnWidths(columnCount: number): number[] {
   if (columnCount === 2) return [34, 66];
-  if (columnCount === 3) return [22, 30, 48];
+  if (columnCount === 3) return [18, 37, 45];
   if (columnCount === 4) return [18, 22, 16, 44];
 
   return Array.from({ length: columnCount }, () => Math.floor(100 / columnCount));
