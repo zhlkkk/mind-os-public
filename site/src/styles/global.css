@@ -647,26 +647,54 @@ h2 {
 
   .article-content table {
     display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     width: 100%;
+    overflow: visible;
     font-size: 13px;
   }
 
-  .article-content th,
+  .article-content thead {
+    display: none;
+  }
+
+  .article-content tbody,
+  .article-content tr,
   .article-content td {
-    padding: 10px;
+    display: block;
   }
 
-  .article-content th:nth-child(-n + 2),
-  .article-content td:nth-child(-n + 2) {
-    min-width: max-content;
-    white-space: nowrap;
+  .article-content tr {
+    margin: 14px 0;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255, 253, 250, 0.72);
   }
 
-  .article-content th:nth-child(3),
+  .article-content td,
+  .article-content td:nth-child(-n + 2),
   .article-content td:nth-child(3) {
-    min-width: 280px;
+    min-width: 0;
+    padding: 9px 0;
+    border-bottom: 1px dashed var(--line-soft);
     white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .article-content td:last-child {
+    border-bottom: 0;
+  }
+
+  .article-content td:empty {
+    display: none;
+  }
+
+  .article-content td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 3px;
+    color: var(--espresso);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
   }
 }

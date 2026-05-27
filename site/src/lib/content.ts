@@ -57,7 +57,7 @@ function readArticle(path: string): Article {
 
   const frontmatter = parseFrontmatter(match[1], basename(path, ".md"));
   const body = stripDuplicateTitle(match[2].trim(), frontmatter.title);
-  const html = rewriteAssetPaths(marked.parse(body, { async: false }) as string);
+  const html = enhanceTables(rewriteAssetPaths(marked.parse(body, { async: false }) as string));
   const words = body.replace(/```[\s\S]*?```/g, "").length;
 
   return {
@@ -146,4 +146,50 @@ function rewriteAssetPaths(html: string): string {
   const assetBase = `${base}/assets/`.replace(/^\/\//, "/");
 
   return html.replace(/src="\.\.\/assets\//g, `src="${assetBase}`);
+}
+
+function enhanceTables(html: string): string {
+  return html.replace(/<table>[\s\S]*?<\/table>/g, (table) => {
+    const headerMatch = table.match(/<thead>\s*<tr>([\s\S]*?)<\/tr>\s*<\/thead>/);
+    if (!headerMatch) return table;
+
+    const headers = Array.from(headerMatch[1].matchAll(/<th[^>]*>([\s\S]*?)<\/th>/g)).map((match) =>
+      escapeAttribute(stripHtml(match[1]).trim()),
+    );
+
+    if (!headers.length) return table;
+
+    return table.replace(/<tbody>([\s\S]*?)<\/tbody>/, (_, bodyHtml) => {
+      const enhancedBody = bodyHtml.replace(/<tr>([\s\S]*?)<\/tr>/g, (_, rowHtml) => {
+        let columnIndex = 0;
+        const enhancedRow = rowHtml.replace(/<td([^>]*)>/g, (_, attributes) => {
+          const label = headers[columnIndex] ?? "";
+          columnIndex += 1;
+          return `<td${attributes} data-label="${label}">`;
+        });
+
+        return `<tr>${enhancedRow}</tr>`;
+      });
+
+      return `<tbody>${enhancedBody}</tbody>`;
+    });
+  });
+}
+
+function stripHtml(value: string): string {
+  return value
+    .replace(/<[^>]*>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
+function escapeAttribute(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
