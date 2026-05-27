@@ -151,28 +151,44 @@ function rewriteAssetPaths(html: string): string {
 function enhanceTables(html: string): string {
   return html.replace(/<table>[\s\S]*?<\/table>/g, (table) => {
     const headerMatch = table.match(/<thead>\s*<tr>([\s\S]*?)<\/tr>\s*<\/thead>/);
+    const bodyMatch = table.match(/<tbody>([\s\S]*?)<\/tbody>/);
     if (!headerMatch) return table;
 
     const headers = Array.from(headerMatch[1].matchAll(/<th[^>]*>([\s\S]*?)<\/th>/g)).map((match) =>
-      escapeAttribute(stripHtml(match[1]).trim()),
+      escapeHtml(stripHtml(match[1]).trim()),
     );
 
-    if (!headers.length) return table;
+    if (!headers.length || !bodyMatch) return table;
 
-    return table.replace(/<tbody>([\s\S]*?)<\/tbody>/, (_, bodyHtml) => {
-      const enhancedBody = bodyHtml.replace(/<tr>([\s\S]*?)<\/tr>/g, (_, rowHtml) => {
-        let columnIndex = 0;
-        const enhancedRow = rowHtml.replace(/<td([^>]*)>/g, (_, attributes) => {
-          const label = headers[columnIndex] ?? "";
-          columnIndex += 1;
-          return `<td${attributes} data-label="${label}">`;
-        });
+    const rows = Array.from(bodyMatch[1].matchAll(/<tr>([\s\S]*?)<\/tr>/g))
+      .map((rowMatch) =>
+        Array.from(rowMatch[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)).map((cellMatch) => cellMatch[1].trim()),
+      )
+      .filter((cells) => cells.some((cell) => stripHtml(cell).trim() !== ""));
 
-        return `<tr>${enhancedRow}</tr>`;
-      });
+    if (!rows.length) return table;
 
-      return `<tbody>${enhancedBody}</tbody>`;
-    });
+    const cards = rows
+      .map((cells) => {
+        const items = cells
+          .map((cell, index) => {
+            if (stripHtml(cell).trim() === "") return "";
+
+            const label = headers[index] ?? `第 ${index + 1} 列`;
+            return [
+              '<div class="article-data-item" style="padding:10px 0;border-bottom:1px dashed rgba(31,29,26,.1);">',
+              `<div class="article-data-label" style="margin-bottom:4px;color:#65452f;font-size:12px;font-weight:700;">${label}</div>`,
+              `<div class="article-data-value" style="color:#3f3a34;line-height:1.75;word-break:break-word;overflow-wrap:anywhere;">${cell}</div>`,
+              "</div>",
+            ].join("");
+          })
+          .join("");
+
+        return `<section class="article-data-card" style="margin:14px 0;padding:12px 14px;border:1px solid #dfd3bf;border-radius:8px;background:rgba(255,253,250,.74);">${items}</section>`;
+      })
+      .join("");
+
+    return `<div class="article-data-list">${cards}</div>`;
   });
 }
 
@@ -186,10 +202,11 @@ function stripHtml(value: string): string {
     .replace(/&#39;/g, "'");
 }
 
-function escapeAttribute(value: string): string {
+function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
     .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
