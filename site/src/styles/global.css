@@ -358,7 +358,7 @@ h2 {
 
 .date,
 .read-time,
-.article-main small {
+.article-row .article-main small {
   color: var(--muted);
 }
 
@@ -368,19 +368,19 @@ h2 {
   font-size: 12px;
 }
 
-.article-main strong,
-.article-main small {
+.article-row .article-main strong,
+.article-row .article-main small {
   display: block;
 }
 
-.article-main strong {
+.article-row .article-main strong {
   font-family: var(--serif);
   font-size: 24px;
   font-weight: 400;
   line-height: 1.25;
 }
 
-.article-main small {
+.article-row .article-main small {
   margin-top: 7px;
   font-size: 13px;
   line-height: 1.55;
@@ -564,7 +564,6 @@ h2 {
   width: min(1040px, 100%);
   margin: 22px auto 0;
   padding: 18px 0 20px;
-  border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
 
@@ -664,6 +663,11 @@ h2 {
   font-weight: 700;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
+}
+
+.article-content strong {
+  color: var(--ink);
+  font-weight: 700;
 }
 
 .article-content blockquote {
