@@ -39,9 +39,24 @@ const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.fr
 <BaseLayout title={`${article.frontmatter.title} · Mind-OS Public`} description={article.frontmatter.summary}>
   <article class="article-page">
     <div class="article-reading-layout">
+      <header class="article-hero">
+        <a class="back-link" href={base}>← 返回文章列表</a>
+        <p class="eyebrow">Article · {article.frontmatter.date} · {article.readingMinutes} 分钟</p>
+        <h1>{article.frontmatter.title}</h1>
+        <p class="article-summary">{article.frontmatter.summary}</p>
+        <div class="article-meta">
+          <div class="tags">
+            {article.frontmatter.tags.map((tag, index) => <span class={`tag tone-${(index % 5) + 1}`}>{tag}</span>)}
+          </div>
+          {discussionUrl && <a class="button primary compact" href={discussionUrl}>参与讨论 #{article.frontmatter.discussion?.issue}</a>}
+        </div>
+      </header>
+
       <aside class="article-toc" aria-label="章节目录">
-        <div class="article-toc-inner">
-          <p class="toc-kicker">章节目录</p>
+        <details class="article-toc-inner" open>
+          <summary class="toc-panel-summary">
+            <span class="toc-kicker">章节目录</span>
+          </summary>
           <ol class="toc-list">
             {
               tocSections.map((section) => (
@@ -64,35 +79,20 @@ const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.fr
               ))
             }
           </ol>
-        </div>
+        </details>
       </aside>
 
-      <div class="article-main">
-        <header class="article-hero">
-          <a class="back-link" href={base}>← 返回文章列表</a>
-          <p class="eyebrow">Article · {article.frontmatter.date} · {article.readingMinutes} 分钟</p>
-          <h1>{article.frontmatter.title}</h1>
-          <p class="article-summary">{article.frontmatter.summary}</p>
-          <div class="article-meta">
-            <div class="tags">
-              {article.frontmatter.tags.map((tag, index) => <span class={`tag tone-${(index % 5) + 1}`}>{tag}</span>)}
-            </div>
-            {discussionUrl && <a class="button primary compact" href={discussionUrl}>参与讨论 #{article.frontmatter.discussion?.issue}</a>}
-          </div>
-        </header>
+      <section class="article-speed-read" aria-labelledby="speed-read-title">
+        <div class="speed-read-heading">
+          <p class="toc-kicker">AI 速读</p>
+          <h2 id="speed-read-title">5 分钟速读</h2>
+        </div>
+        <ol class="speed-read-list">
+          {speedReadPoints.map((point) => <li>{point}</li>)}
+        </ol>
+      </section>
 
-        <section class="article-speed-read" aria-labelledby="speed-read-title">
-          <div class="speed-read-heading">
-            <p class="toc-kicker">AI 速读</p>
-            <h2 id="speed-read-title">5 分钟速读</h2>
-          </div>
-          <ol class="speed-read-list">
-            {speedReadPoints.map((point) => <li>{point}</li>)}
-          </ol>
-        </section>
-
-        <div class="article-content" set:html={article.html} />
-      </div>
+      <div class="article-content" set:html={article.html} />
     </div>
   </article>
 </BaseLayout>

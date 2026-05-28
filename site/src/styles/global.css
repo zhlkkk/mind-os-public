@@ -151,7 +151,7 @@ nav a:focus-visible {
 }
 
 main {
-  padding: 42px 0 86px;
+  padding: 28px 0 80px;
 }
 
 .hero {
@@ -188,11 +188,11 @@ h3 {
 
 h1 {
   max-width: 940px;
-  font-size: 60px;
+  font-size: 48px;
 }
 
 h2 {
-  font-size: 36px;
+  font-size: 31px;
 }
 
 .lead,
@@ -200,7 +200,7 @@ h2 {
   max-width: 760px;
   color: var(--ink-soft);
   font-family: var(--serif);
-  font-size: 19px;
+  font-size: 15px;
   font-style: italic;
   line-height: 1.55;
 }
@@ -211,7 +211,7 @@ h2 {
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
-  margin-top: 28px;
+  margin-top: 22px;
 }
 
 .button {
@@ -433,48 +433,74 @@ h2 {
 }
 
 .article-page {
+  position: relative;
+  left: 50%;
+  width: min(1440px, calc(100vw - 40px));
+  transform: translateX(-50%);
   padding-bottom: 96px;
 }
 
 .article-reading-layout {
   display: grid;
-  grid-template-columns: minmax(190px, 260px) minmax(0, 1040px);
-  gap: 44px;
+  grid-template-columns: minmax(180px, 220px) minmax(0, 900px) minmax(180px, 220px);
+  column-gap: 36px;
+  row-gap: 32px;
   align-items: start;
-  width: min(1440px, calc(100% - 40px));
+  justify-content: center;
+  width: 100%;
   margin: 0 auto;
 }
 
-.article-main {
+.article-row .article-main {
   min-width: 0;
 }
 
 .article-toc {
+  grid-column: 1;
+  grid-row: 3;
   position: sticky;
   top: 28px;
-  max-height: calc(100vh - 56px);
-  padding-top: 58px;
-  overflow-y: auto;
-  scrollbar-color: rgba(101, 69, 47, 0.28) transparent;
-  scrollbar-width: thin;
-}
-
-.article-toc::-webkit-scrollbar {
-  width: 5px;
-}
-
-.article-toc::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.article-toc::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(101, 69, 47, 0.24);
+  align-self: start;
+  min-width: 0;
+  overflow: visible;
 }
 
 .article-toc-inner {
-  padding: 16px 0 18px 18px;
-  border-left: 2px solid var(--line);
+  padding: 4px 0 4px 16px;
+  border-left: 1px solid var(--line);
+}
+
+.toc-panel-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.toc-panel-summary::-webkit-details-marker {
+  display: none;
+}
+
+.toc-panel-summary .toc-kicker {
+  margin: 0;
+}
+
+.toc-panel-summary::after {
+  color: var(--muted-light);
+  content: "+";
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.article-toc-inner[open] .toc-panel-summary {
+  margin-bottom: 12px;
+}
+
+.article-toc-inner[open] .toc-panel-summary::after {
+  content: "-";
 }
 
 .toc-kicker {
@@ -497,7 +523,11 @@ h2 {
 
 .toc-list {
   display: grid;
-  gap: 10px;
+  gap: 8px;
+}
+
+.article-toc-inner:not([open]) .toc-list {
+  display: none;
 }
 
 .toc-children {
@@ -512,6 +542,7 @@ h2 {
   display: block;
   color: var(--muted);
   text-decoration: none;
+  overflow-wrap: anywhere;
   transition: color 160ms ease, transform 160ms ease;
 }
 
@@ -525,28 +556,40 @@ h2 {
 .toc-link-section {
   color: var(--ink-soft);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   line-height: 1.45;
 }
 
 .toc-link-child {
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.5;
 }
 
 .article-hero {
-  width: min(1040px, 100%);
+  grid-column: 2;
+  display: grid;
+  row-gap: 24px;
+  width: 100%;
   margin: 0 auto;
-  padding: 38px 0 34px;
+  padding: 24px 0 28px;
   border-bottom: 1px solid var(--line-soft);
+}
+
+.article-hero .eyebrow,
+.article-hero .article-summary {
+  margin: 0;
+}
+
+.article-hero .article-meta {
+  margin-top: 0;
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
   min-height: 34px;
-  margin-bottom: 28px;
+  margin-bottom: 0;
   color: var(--muted);
   font-family: var(--mono);
   font-size: 12px;
@@ -560,12 +603,13 @@ h2 {
 }
 
 .article-speed-read {
+  grid-column: 2;
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr);
   gap: 28px;
-  width: min(1040px, 100%);
-  margin: 22px auto 0;
-  padding: 18px 0 20px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -573,7 +617,7 @@ h2 {
   margin: 0;
   color: var(--espresso);
   font-family: var(--serif);
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 400;
   line-height: 1.05;
 }
@@ -590,7 +634,7 @@ h2 {
   min-width: 0;
   padding-left: 28px;
   color: var(--ink-soft);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.65;
 }
 
@@ -613,16 +657,17 @@ h2 {
 }
 
 .article-content {
-  width: min(1040px, 100%);
-  margin: 34px auto 0;
+  grid-column: 2;
+  width: 100%;
+  margin: 0 auto;
   padding: 46px 64px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: rgba(255, 253, 250, 0.82);
   box-shadow: var(--shadow);
   color: var(--ink-soft);
-  font-size: 16px;
-  line-height: 1.85;
+  font-size: 15px;
+  line-height: 1.82;
 }
 
 .article-content h2,
@@ -640,15 +685,15 @@ h2 {
   padding-bottom: 8px;
   border-bottom: 1px solid var(--line-soft);
   color: var(--espresso);
-  font-size: 29px;
+  font-size: 27px;
 }
 
 .article-content h3 {
-  font-size: 22px;
+  font-size: 21px;
 }
 
 .article-content h4 {
-  font-size: 19px;
+  font-size: 18px;
 }
 
 .article-content p,
@@ -682,7 +727,7 @@ h2 {
   border-left: 3px solid var(--amber);
   color: var(--espresso);
   font-family: var(--serif);
-  font-size: 17px;
+  font-size: 16px;
   font-style: italic;
   line-height: 1.75;
 }
@@ -772,7 +817,7 @@ h2 {
   }
 
   h1 {
-    font-size: 48px;
+    font-size: 40px;
   }
 }
 
@@ -801,16 +846,16 @@ h2 {
   }
 
   h1 {
-    font-size: 36px;
+    font-size: 30px;
   }
 
   h2 {
-    font-size: 29px;
+    font-size: 25px;
   }
 
   .lead,
   .article-summary {
-    font-size: 17px;
+    font-size: 14.5px;
   }
 
   .article-row {
@@ -835,7 +880,7 @@ h2 {
   }
 
   .speed-read-heading h2 {
-    font-size: 25px;
+    font-size: 23px;
   }
 
   .speed-read-list {
@@ -845,24 +890,24 @@ h2 {
 
   .article-content {
     padding: 28px 18px;
-    font-size: 15px;
+    font-size: 14.5px;
   }
 
   .article-content h2 {
-    font-size: 26px;
+    font-size: 24px;
   }
 
   .article-content h3 {
-    font-size: 20px;
+    font-size: 19px;
   }
 
   .article-content h4 {
-    font-size: 18px;
+    font-size: 17px;
   }
 
   .article-content blockquote {
     padding-left: 15px;
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .article-content img {
