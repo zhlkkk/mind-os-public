@@ -23,12 +23,19 @@ export type ArticleFrontmatter = {
   };
 };
 
+export type ArticleTocItem = {
+  depth: 2 | 3;
+  id: string;
+  text: string;
+};
+
 export type Article = {
   frontmatter: ArticleFrontmatter;
   body: string;
   html: string;
   readingMinutes: number;
   sourcePath: string;
+  toc: ArticleTocItem[];
 };
 
 export function getArticles(): Article[] {
@@ -57,7 +64,9 @@ function readArticle(path: string): Article {
 
   const frontmatter = parseFrontmatter(match[1], basename(path, ".md"));
   const body = stripDuplicateTitle(match[2].trim(), frontmatter.title);
-  const html = enhanceTables(rewriteAssetPaths(marked.parse(body, { async: false }) as string));
+  const toc = extractToc(body);
+  const parsedHtml = marked.parse(body, { async: false }) as string;
+  const html = enhanceTables(rewriteAssetPaths(addHeadingIds(parsedHtml, toc)));
   const words = body.replace(/```[\s\S]*?```/g, "").length;
 
   return {
@@ -66,6 +75,7 @@ function readArticle(path: string): Article {
     html,
     readingMinutes: Math.max(1, Math.ceil(words / 550)),
     sourcePath: path,
+    toc,
   };
 }
 
@@ -146,6 +156,53 @@ function rewriteAssetPaths(html: string): string {
   const assetBase = `${base}/assets/`.replace(/^\/\//, "/");
 
   return html.replace(/src="\.\.\/assets\//g, `src="${assetBase}`);
+}
+
+function extractToc(body: string): ArticleTocItem[] {
+  const counts = new Map<string, number>();
+
+  return Array.from(body.matchAll(/^(#{2,3})\s+(.+)$/gm)).map((match, index) => {
+    const depth = match[1].length as 2 | 3;
+    const text = stripMarkdown(match[2]).trim();
+    const baseId = slugifyHeading(text) || `section-${index + 1}`;
+    const count = counts.get(baseId) ?? 0;
+    counts.set(baseId, count + 1);
+
+    return {
+      depth,
+      id: count === 0 ? baseId : `${baseId}-${count + 1}`,
+      text,
+    };
+  });
+}
+
+function addHeadingIds(html: string, toc: ArticleTocItem[]): string {
+  let index = 0;
+
+  return html.replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (heading, depth) => {
+    const item = toc[index];
+    index += 1;
+
+    if (!item || item.depth !== Number(depth)) return heading;
+
+    return heading.replace(`<h${depth}>`, `<h${depth} id="${item.id}">`);
+  });
+}
+
+function stripMarkdown(value: string): string {
+  return stripHtml(value)
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/[`*_~>#]/g, "")
+    .replace(/\s+/g, " ");
+}
+
+function slugifyHeading(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^\p{Letter}\p{Number}]+/gu, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 function enhanceTables(html: string): string {
