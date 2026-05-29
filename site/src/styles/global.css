@@ -613,6 +613,10 @@ h2 {
   border-bottom: 1px solid var(--line);
 }
 
+.speed-read-heading {
+  align-self: center;
+}
+
 .speed-read-heading h2 {
   margin: 0;
   color: var(--espresso);
