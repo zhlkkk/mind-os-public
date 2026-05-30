@@ -9,8 +9,8 @@ tags: [trading-agent, agent-engineering, hyperliquid, ccxt, hermes, qlib, risk-g
 origin:
   private_path: raw/publish/2026-05-29-kain-trading-agent-architecture.md
 discussion:
-  issue: 
-  url: 
+  issue: 7
+  url: https://github.com/zhlkkk/mind-os-public/issues/7
 formats:
   html: /articles/kain-trading-agent-architecture
   slides:
