@@ -10,7 +10,12 @@ export function getStaticPaths() {
 }
 
 const { article } = Astro.props;
-const discussionUrl = article.frontmatter.discussion?.url;
+const discussionUrl =
+  typeof article.frontmatter.discussion?.url === "string" && article.frontmatter.discussion.url
+    ? article.frontmatter.discussion.url
+    : undefined;
+const discussionIssue =
+  typeof article.frontmatter.discussion?.issue === "number" ? article.frontmatter.discussion.issue : undefined;
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const tocSections = article.toc.reduce<Array<(typeof article.toc)[number] & { children: typeof article.toc }>>(
   (sections, item) => {
@@ -32,6 +37,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "读书工作流不追求导出更多，而是用 RIA 把触动点转成理解和行动。",
     "个人 Harness 的价值不在工具链本身，而在让问答、阅读和碎片输入持续回流成知识资产。",
   ],
+  "kain-trading-agent-architecture": [
+    "这篇文章的核心不是让 AI 更会下单，而是把真实资金相关 Agent 的权限拆到足够窄。",
+    "Kain 的生产架构分成研究、监督、风控、执行和保护五层：RD-Agent/Qlib 只做 shadow 证据，CCXT 才是唯一执行边界。",
+    "Hermes 被从“交易员”降级为 supervisor：它可以解释候选、复盘和生成结构化 intent，但不能绕过 Router / Risk Governor。",
+    "Router / Risk Governor 的价值在于能拒绝开仓：账户权益、trader、tier、regime、止损、杠杆和风险预算都必须先过硬规则。",
+    "最适合先生产化的部分可能不是自动开仓，而是 7x24 的只降风险保护链路：补 SL、清理异常保护单、维护 TP 和 trailing。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 ---
@@ -48,7 +60,7 @@ const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.fr
           <div class="tags">
             {article.frontmatter.tags.map((tag, index) => <span class={`tag tone-${(index % 5) + 1}`}>{tag}</span>)}
           </div>
-          {discussionUrl && <a class="button primary compact" href={discussionUrl}>参与讨论 #{article.frontmatter.discussion?.issue}</a>}
+          {discussionUrl && <a class="button primary compact" href={discussionUrl}>参与讨论 #{discussionIssue}</a>}
         </div>
       </header>
 
