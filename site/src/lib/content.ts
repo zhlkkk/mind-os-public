@@ -11,6 +11,7 @@ export type ArticleFrontmatter = {
   date: string;
   status: "draft" | "ready" | "published" | "archived";
   summary: string;
+  cover?: string;
   tags: string[];
   discussion?: {
     issue?: number;
@@ -115,6 +116,7 @@ function parseFrontmatter(source: string, fallbackSlug: string): ArticleFrontmat
     date: String(data.date ?? ""),
     status: data.status ?? "draft",
     summary: data.summary ?? "",
+    cover: typeof data.cover === "string" ? data.cover : undefined,
     tags: Array.isArray(data.tags) ? data.tags : [],
     discussion: data.discussion ?? {},
     formats: data.formats ?? {},

@@ -4,6 +4,7 @@ slug: kain-trading-agent-architecture
 date: 2026-05-29
 status: ready
 summary: 上午 11:05，Kain Trading Agent 给我发了一条 Telegram：
+cover: ../assets/articles/kain-trading-agent-architecture/cover.png
 tags: [trading-agent, agent-engineering, hyperliquid, ccxt, hermes, qlib, risk-governor, shadow-learning]
 origin:
   private_path: raw/publish/2026-05-29-kain-trading-agent-architecture.md

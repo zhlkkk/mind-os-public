@@ -46,15 +46,21 @@ module ContentSync
     frontmatter = article.fetch("frontmatter")
     body = normalize_body(article.fetch("body"), source_path, slug, dest_root)
     summary = public_summary(frontmatter, body)
+    cover = public_cover_path(source_path, slug, dest_root)
     discussion = existing_article&.fetch("frontmatter", {})&.fetch("discussion", nil) || frontmatter.fetch("discussion", {})
 
-    [
+    lines = [
       "---",
       "title: #{frontmatter.fetch("title")}",
       "slug: #{slug}",
       "date: #{frontmatter.fetch("date")}",
       "status: ready",
       "summary: #{summary}",
+    ]
+
+    lines << "cover: #{cover}" if cover
+
+    lines.concat([
       "tags: #{inline_array(frontmatter.fetch("tags", []))}",
       "origin:",
       "  private_path: #{private_path(source_path)}",
@@ -69,7 +75,9 @@ module ContentSync
       "",
       body.strip,
       "",
-    ].join("\n")
+    ])
+
+    lines.join("\n")
   end
 
   def normalize_body(body, source_path, slug, dest_root)
@@ -89,6 +97,32 @@ module ContentSync
     copy_public_asset(source_asset_path, output_path)
 
     "![#{filename}](../assets/articles/#{slug}/#{url_path(filename)})"
+  end
+
+  def public_cover_path(source_path, slug, dest_root)
+    source_cover_path = resolve_cover_path(source_path, slug)
+    return nil unless source_cover_path
+
+    assets_root = File.expand_path("../assets", dest_root)
+    output_path = File.join(assets_root, "articles", slug, "cover.png")
+    copy_public_asset(source_cover_path, output_path)
+
+    "../assets/articles/#{slug}/cover.png"
+  end
+
+  def resolve_cover_path(source_path, slug)
+    publish_assets_root = File.join(File.dirname(source_path), "assets")
+    source_name = File.basename(source_path, ".md")
+    date_prefix = source_name[/\A\d{4}-\d{2}-\d{2}/]
+    slug_without_date = source_name.sub(/\A\d{4}-\d{2}-\d{2}-/, "")
+    candidates = [
+      File.join(publish_assets_root, source_name, "cover.png"),
+      File.join(publish_assets_root, slug, "cover.png"),
+      File.join(publish_assets_root, slug_without_date, "cover.png"),
+    ]
+    candidates << File.join(publish_assets_root, date_prefix, "cover.png") if date_prefix
+
+    candidates.find { |candidate| File.file?(candidate) }
   end
 
   def resolve_asset_path(source_path, target)

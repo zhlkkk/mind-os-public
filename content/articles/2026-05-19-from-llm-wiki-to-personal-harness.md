@@ -4,6 +4,7 @@ slug: from-llm-wiki-to-personal-harness
 date: 2026-05-19
 status: ready
 summary: Harness Engineering 是 2026 年最热的 AI 工程话题，但争论焦点几乎都集中在"该上多大的模型"和"该搭多复杂的工作流"上。
+cover: ../assets/articles/from-llm-wiki-to-personal-harness/cover.png
 tags: [llm-wiki, knowledge-management, agent-engineering, harness, mind-os, karpathy, obsidian, dagster, distill, ria-method]
 origin:
   private_path: raw/publish/2026-05-19-from-llm-wiki-to-personal-harness.md

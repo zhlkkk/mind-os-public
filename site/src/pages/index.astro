@@ -7,6 +7,7 @@ const tags = getTags();
 const featured = articles[0];
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const articleHref = (slug: string) => `${base}articles/${slug}`;
+const assetHref = (path?: string) => (path ? `${base}${path.replace(/^\.\.\//, "")}` : undefined);
 ---
 
 <BaseLayout title="Mind-OS Public" description="Mind-OS 公开文章、讨论和知识工作流记录。">
@@ -41,6 +42,11 @@ const articleHref = (slug: string) => `${base}articles/${slug}`;
       {articles.map((article) => (
         <a class="article-row" href={articleHref(article.frontmatter.slug)}>
           <span class="date">{article.frontmatter.date}</span>
+          {article.frontmatter.cover && (
+            <span class="article-cover" aria-hidden="true">
+              <img src={assetHref(article.frontmatter.cover)} alt="" loading="lazy" />
+            </span>
+          )}
           <span class="article-main">
             <strong>{article.frontmatter.title}</strong>
             <small>{article.frontmatter.summary}</small>
