@@ -44,6 +44,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "Router / Risk Governor 的价值在于能拒绝开仓：账户权益、trader、tier、regime、止损、杠杆和风险预算都必须先过硬规则。",
     "最适合先生产化的部分可能不是自动开仓，而是 7x24 的只降风险保护链路：补 SL、清理异常保护单、维护 TP 和 trailing。",
   ],
+  "agent-native-video-filesystem": [
+    "这篇文章的核心判断是：AI 视频真正的变化不是一次生成成片，而是把视频拆成 Agent 能读写、能检查、能重跑的一套文件。",
+    "当脚本、分镜、旁白、字幕、画面代码和发布元数据都显式存在时，Agent 才能局部修改、定位问题并维护视频项目。",
+    "HyperFrames 的价值在于把视频流程拆成 capture、design、script、storyboard、voiceover、build、validate 等可追踪节点。",
+    "Remotion、HyperFrames、GSAP Skills 和 PPT Skill 指向同一层变化：创作能力正在从软件 UI 变成可组合的目录结构、规则和检查命令。",
+    "最先落地的不是全自动电影，而是产品 demo、技术文章转视频、数据报告视频和教学讲解视频这类结构强、素材可控的创作 Harness。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 ---
