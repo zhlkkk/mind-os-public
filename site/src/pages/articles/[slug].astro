@@ -51,6 +51,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "Remotion、HyperFrames、GSAP Skills 和 PPT Skill 指向同一层变化：创作能力正在从软件 UI 变成可组合的目录结构、规则和检查命令。",
     "最先落地的不是全自动电影，而是产品 demo、技术文章转视频、数据报告视频和教学讲解视频这类结构强、素材可控的创作 Harness。",
   ],
+  "real-cost-of-ai-coding": [
+    "这篇文章的核心判断是：AI 编程真正便宜的是让代码出现，真正昂贵的是让代码安全、可审查地留下来。",
+    "GitHub Copilot 用量计费让模型、输入输出 token 和缓存 token 的成本显性化，包月时代隐藏的粗糙用法会直接进入账单。",
+    "最麻烦的不是完全错误的代码，而是“差不多对”的代码：它能编译、像真代码，却把风险转移到 review、测试和长期维护里。",
+    "成熟团队需要给 Coding Agent 补上规格、测试、权限、回滚、审计和人工审批，这些流程税才是真实生产成本。",
+    "团队不该只看 token 面板，而应建立工程成本仪表盘：PR 返工率、review 时间、测试失败率、回滚率、审批次数和模型分流比例都要纳入。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 ---
