@@ -1,13 +1,12 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getArticles, getTags } from "@/lib/content";
+import { assetHref, getArticles, getTags } from "@/lib/content";
 
 const articles = getArticles();
 const tags = getTags();
 const featured = articles[0];
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const articleHref = (slug: string) => `${base}articles/${slug}`;
-const assetHref = (path?: string) => (path ? `${base}${path.replace(/^\.\.\//, "")}` : undefined);
 ---
 
 <BaseLayout title="Mind-OS Public" description="Mind-OS 公开文章、讨论和知识工作流记录。">
