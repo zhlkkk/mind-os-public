@@ -1,0 +1,56 @@
+{
+  "slides": [
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/01-cover.png",
+      "title": "封面"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/02-git-compare.png",
+      "title": "原生 Git vs GitButler"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/03-lane-demo.png",
+      "title": "泳道分拣示例"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/04-concepts.png",
+      "title": "四术语"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/05-cli-flow.png",
+      "title": "but CLI 流程"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/06-stacked-agent.png",
+      "title": "堆叠分支与 Agent"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/07-vs-worktree.png",
+      "title": "对比 worktree"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/08-vs-jujutsu.png",
+      "title": "对比 Jujutsu"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/09-but-skill.png",
+      "title": "but skill 示例"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/10-boundary.png",
+      "title": "边界"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/11-fit.png",
+      "title": "选型"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/12-checklist.png",
+      "title": "上手清单"
+    },
+    {
+      "path": "../assets/articles/gitbutler-agent-safe-git/carousel/13-links.png",
+      "title": "官方链接"
+    }
+  ]
+}

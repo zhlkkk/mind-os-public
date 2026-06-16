@@ -184,6 +184,53 @@ class SyncContentTest < Minitest::Test
     refute File.exist?(File.join(@dest_root, "2026-05-21-archived-note.md"))
   end
 
+  def test_syncs_social_cover_and_carousel_assets
+    source_name = "2026-06-16-social-note"
+    source_path = File.join(@source_root, "#{source_name}.md")
+    assets_root = File.join(@source_root, "assets", source_name, "gitbutler-ikb-social", "output")
+    wechat_cover = File.join(assets_root, "wechat", "article-cover-2100x900.png")
+    slide_one = File.join(assets_root, "xiaohongshu", "01-cover.png")
+    slide_two = File.join(assets_root, "xiaohongshu", "02-git-compare.png")
+
+    FileUtils.mkdir_p(File.dirname(wechat_cover))
+    write_png(wechat_cover)
+    write_png(slide_one)
+    write_png(slide_two)
+    File.write(File.join(assets_root, "manifest.json"), <<~JSON)
+      {
+        "files": [
+          { "path": "xiaohongshu/01-cover.png", "platform": "xiaohongshu", "title": "封面" },
+          { "path": "xiaohongshu/02-git-compare.png", "platform": "xiaohongshu", "title": "对比" },
+          { "path": "wechat/article-cover-2100x900.png", "platform": "wechat", "title": "公众号头图" }
+        ]
+      }
+    JSON
+
+    File.write(source_path, <<~MARKDOWN)
+      ---
+      title: Social Note
+      date: 2026-06-16
+      status: ready
+      tags: [gitbutler]
+      companion_media: raw/publish/assets/#{source_name}/
+      ---
+
+      # Social Note
+
+      Social body.
+    MARKDOWN
+
+    result = ContentSync.sync_file(source_path, @dest_root)
+    output = File.read(result.output_path)
+    slug = "social-note"
+
+    assert_includes output, "cover: ../assets/articles/#{slug}/cover.png"
+    assert_includes output, "carousel: [../assets/articles/#{slug}/carousel/01-cover.png, ../assets/articles/#{slug}/carousel/02-git-compare.png]"
+    assert File.exist?(File.join(@tmpdir, "public", "content", "assets", "articles", slug, "cover.png"))
+    assert File.exist?(File.join(@tmpdir, "public", "content", "assets", "articles", slug, "carousel", "01-cover.png"))
+    assert File.exist?(File.join(@tmpdir, "public", "content", "assets", "articles", slug, "carousel-manifest.json"))
+  end
+
   private
 
   def write_png(path)

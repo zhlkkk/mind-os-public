@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getArticleBySlug, getArticles } from "@/lib/content";
+import { assetHref, getArticleBySlug, getArticles } from "@/lib/content";
 
 export function getStaticPaths() {
   return getArticles().map((article) => ({
@@ -58,8 +58,22 @@ const speedReadBySlug: Record<string, string[]> = {
     "成熟团队需要给 Coding Agent 补上规格、测试、权限、回滚、审计和人工审批，这些流程税才是真实生产成本。",
     "团队不该只看 token 面板，而应建立工程成本仪表盘：PR 返工率、review 时间、测试失败率、回滚率、审批次数和模型分流比例都要纳入。",
   ],
+  "gitbutler-agent-safe-git": [
+    "GitButler 不是 GitHub 替代品，而是在现有 Git 仓库上加的工作区组织层：同目录多泳道、按 file/hunk 分拣 diff。",
+    "Agent 写代码越来越快，真正慢的是混杂 diff 的整理；GitButler 用 virtual branches 和 but stage 把后置分拣做成可审查历史。",
+    "release/0.20.0 起 Agent 主线是 but skill install，不是旧文档里的 MCP 或桌面内嵌 Claude Code GUI。",
+    "和 git worktree 分工不同：worktree 隔离运行时，泳道隔离提交历史；强隔离用 worktree，同目录整理用泳道。",
+    "试点前记住硬边界：不要碰 gitbutler/workspace，Agent 只本地 commit 不自动 push，大改历史前先 but oplog snapshot。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
+const coverSrc = assetHref(article.frontmatter.cover);
+const carouselSlides = article.carouselSlides
+  .map((slide) => ({
+    ...slide,
+    src: assetHref(slide.path),
+  }))
+  .filter((slide) => slide.src);
 ---
 
 <BaseLayout title={`${article.frontmatter.title} · Mind-OS Public`} description={article.frontmatter.summary}>
@@ -77,6 +91,58 @@ const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.fr
           {discussionUrl && <a class="button primary compact" href={discussionUrl}>参与讨论 #{discussionIssue}</a>}
         </div>
       </header>
+
+      {coverSrc && (
+        <figure class="article-cover-hero">
+          <img src={coverSrc} alt={`${article.frontmatter.title} 封面`} loading="eager" />
+        </figure>
+      )}
+
+      {carouselSlides.length > 0 && (
+        <section class="article-carousel" aria-label="配图轮播">
+          <div class="article-carousel-heading">
+            <p class="toc-kicker">Visual Brief</p>
+            <h2>一图速览</h2>
+            <p class="article-carousel-note">以下配图与公众号、小红书同步发布，可左右切换浏览全文要点。</p>
+          </div>
+          <div class="article-carousel-shell" data-carousel tabindex="0">
+            <button class="carousel-button prev" type="button" data-carousel-prev aria-label="上一张">←</button>
+            <figure class="carousel-stage">
+              <div class="carousel-viewport" data-carousel-viewport>
+                {
+                  carouselSlides.map((slide, index) => (
+                    <img
+                      class:list={["carousel-slide", { active: index === 0 }]}
+                      src={slide.src}
+                      alt={slide.title}
+                      data-carousel-slide
+                      data-index={index}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                  ))
+                }
+              </div>
+              <figcaption class="carousel-caption" data-carousel-caption aria-live="polite">
+                <span class="carousel-caption-text">{carouselSlides[0].title}</span>
+              </figcaption>
+            </figure>
+            <button class="carousel-button next" type="button" data-carousel-next aria-label="下一张">→</button>
+          </div>
+          <div class="carousel-dots" data-carousel-dots>
+            {
+              carouselSlides.map((slide, index) => (
+                <button
+                  class:list={["carousel-dot", { active: index === 0 }]}
+                  type="button"
+                  data-carousel-dot={index}
+                  aria-label={`第 ${index + 1} 张：${slide.title}`}
+                />
+              ))
+            }
+          </div>
+        </section>
+      )}
 
       <aside class="article-toc" aria-label="章节目录">
         <details class="article-toc-inner" open>
@@ -121,4 +187,111 @@ const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.fr
       <div class="article-content" set:html={article.html} />
     </div>
   </article>
+
+  {
+    carouselSlides.length > 0 && (
+      <script define:vars={{ carouselTitles: carouselSlides.map((slide) => slide.title) }}>
+        const root = document.querySelector("[data-carousel]");
+        if (root) {
+          const viewport = root.querySelector("[data-carousel-viewport]");
+          const slides = Array.from(root.querySelectorAll("[data-carousel-slide]"));
+          const dots = Array.from(document.querySelectorAll("[data-carousel-dot]"));
+          const caption = root.querySelector(".carousel-caption-text");
+          const prev = root.querySelector("[data-carousel-prev]");
+          const next = root.querySelector("[data-carousel-next]");
+          const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          const duration = reducedMotion ? 0 : 420;
+          let index = 0;
+          let animating = false;
+
+          const show = (nextIndex, direction = 0) => {
+            const normalized = (nextIndex + slides.length) % slides.length;
+            if (animating || normalized === index) return;
+
+            const outgoing = slides[index];
+            const incoming = slides[normalized];
+            animating = true;
+
+            const applyChange = () => {
+              if (direction !== 0 && !reducedMotion) {
+                outgoing.classList.remove("active");
+                outgoing.classList.add(direction > 0 ? "is-exit-left" : "is-exit-right");
+                incoming.classList.add("active");
+              } else {
+                outgoing.classList.remove("active");
+                incoming.classList.add("active");
+              }
+            };
+
+            if (direction !== 0 && !reducedMotion) {
+              incoming.classList.add(direction > 0 ? "is-enter-right" : "is-enter-left");
+              requestAnimationFrame(() => {
+                requestAnimationFrame(applyChange);
+              });
+            } else {
+              applyChange();
+            }
+
+            dots.forEach((dot, dotIndex) => dot.classList.toggle("active", dotIndex === normalized));
+
+            if (caption) {
+              caption.classList.add("is-changing");
+              window.setTimeout(() => {
+                caption.textContent = carouselTitles[normalized] ?? "";
+                caption.classList.remove("is-changing");
+              }, reducedMotion ? 0 : duration / 2);
+            }
+
+            index = normalized;
+
+            window.setTimeout(() => {
+              outgoing.classList.remove("is-exit-left", "is-exit-right");
+              incoming.classList.remove("is-enter-right", "is-enter-left");
+              animating = false;
+            }, duration);
+          };
+
+          prev?.addEventListener("click", () => show(index - 1, -1));
+          next?.addEventListener("click", () => show(index + 1, 1));
+          dots.forEach((dot) => {
+            dot.addEventListener("click", () => {
+              const target = Number(dot.getAttribute("data-carousel-dot"));
+              show(target, target > index ? 1 : target < index ? -1 : 0);
+            });
+          });
+
+          root.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowLeft") {
+              event.preventDefault();
+              show(index - 1, -1);
+            }
+            if (event.key === "ArrowRight") {
+              event.preventDefault();
+              show(index + 1, 1);
+            }
+          });
+
+          if (viewport) {
+            let touchStartX = 0;
+            viewport.addEventListener(
+              "touchstart",
+              (event) => {
+                touchStartX = event.changedTouches[0]?.clientX ?? 0;
+              },
+              { passive: true },
+            );
+            viewport.addEventListener(
+              "touchend",
+              (event) => {
+                const delta = (event.changedTouches[0]?.clientX ?? 0) - touchStartX;
+                if (Math.abs(delta) < 48) return;
+                show(delta < 0 ? index + 1 : index - 1, delta < 0 ? 1 : -1);
+              },
+              { passive: true },
+            );
+          }
+        }
+      </script>
+    )
+  }
 </BaseLayout>

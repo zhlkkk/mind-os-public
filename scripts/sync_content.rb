@@ -2,6 +2,7 @@
 
 require "date"
 require "fileutils"
+require "json"
 require "optparse"
 require "yaml"
 
@@ -46,7 +47,8 @@ module ContentSync
     frontmatter = article.fetch("frontmatter")
     body = normalize_body(article.fetch("body"), source_path, slug, dest_root)
     summary = public_summary(frontmatter, body)
-    cover = public_cover_path(source_path, slug, dest_root)
+    cover = public_cover_path(source_path, slug, dest_root, frontmatter)
+    carousel = public_carousel_assets(source_path, slug, dest_root, frontmatter)
     discussion = existing_article&.fetch("frontmatter", {})&.fetch("discussion", nil) || frontmatter.fetch("discussion", {})
 
     lines = [
@@ -59,6 +61,7 @@ module ContentSync
     ]
 
     lines << "cover: #{cover}" if cover
+    lines << "carousel: #{inline_array(carousel.fetch(:paths, []))}" if carousel.fetch(:paths, []).any?
 
     lines.concat([
       "tags: #{inline_array(frontmatter.fetch("tags", []))}",
@@ -99,8 +102,8 @@ module ContentSync
     "![#{filename}](../assets/articles/#{slug}/#{url_path(filename)})"
   end
 
-  def public_cover_path(source_path, slug, dest_root)
-    source_cover_path = resolve_cover_path(source_path, slug)
+  def public_cover_path(source_path, slug, dest_root, frontmatter)
+    source_cover_path = resolve_cover_path(source_path, slug, frontmatter)
     return nil unless source_cover_path
 
     assets_root = File.expand_path("../assets", dest_root)
@@ -110,11 +113,41 @@ module ContentSync
     "../assets/articles/#{slug}/cover.png"
   end
 
-  def resolve_cover_path(source_path, slug)
-    publish_assets_root = File.join(File.dirname(source_path), "assets")
+  def public_carousel_assets(source_path, slug, dest_root, frontmatter)
+    slides = resolve_carousel_slides(source_path, frontmatter)
+    return { paths: [], manifest: [] } if slides.empty?
+
+    assets_root = File.expand_path("../assets", dest_root)
+    carousel_root = File.join(assets_root, "articles", slug, "carousel")
+    manifest_entries = []
+
+    slides.each do |slide|
+      filename = File.basename(slide.fetch("path"))
+      output_path = File.join(carousel_root, filename)
+      copy_public_asset(slide.fetch("source_path"), output_path)
+      public_path = "../assets/articles/#{slug}/carousel/#{url_path(filename)}"
+      manifest_entries << {
+        "path" => public_path,
+        "title" => slide.fetch("title"),
+      }
+    end
+
+    manifest_path = File.join(assets_root, "articles", slug, "carousel-manifest.json")
+    File.write(
+      manifest_path,
+      JSON.pretty_generate({ "slides" => manifest_entries }),
+    )
+
+    { paths: manifest_entries.map { |entry| entry.fetch("path") }, manifest: manifest_entries }
+  end
+
+  def resolve_cover_path(source_path, slug, frontmatter)
+    publish_assets_root = companion_assets_root(source_path, frontmatter)
     source_name = File.basename(source_path, ".md")
     date_prefix = source_name[/\A\d{4}-\d{2}-\d{2}/]
     slug_without_date = source_name.sub(/\A\d{4}-\d{2}-\d{2}-/, "")
+    social_output_root = social_output_root_for(publish_assets_root)
+
     candidates = [
       File.join(publish_assets_root, source_name, "cover.png"),
       File.join(publish_assets_root, slug, "cover.png"),
@@ -122,7 +155,56 @@ module ContentSync
     ]
     candidates << File.join(publish_assets_root, date_prefix, "cover.png") if date_prefix
 
+    if social_output_root
+      candidates << File.join(social_output_root, "wechat", "article-cover-2100x900.png")
+      candidates << File.join(social_output_root, "wechat", "square-cover-1080x1080.png")
+      candidates << File.join(social_output_root, "xiaohongshu", "01-cover.png")
+    end
+
     candidates.find { |candidate| File.file?(candidate) }
+  end
+
+  def resolve_carousel_slides(source_path, frontmatter)
+    publish_assets_root = companion_assets_root(source_path, frontmatter)
+    social_output_root = social_output_root_for(publish_assets_root)
+    return [] unless social_output_root
+
+    manifest_path = File.join(social_output_root, "manifest.json")
+    return [] unless File.file?(manifest_path)
+
+    manifest = JSON.parse(File.read(manifest_path))
+    manifest.fetch("files", [])
+      .select { |entry| entry.fetch("platform") == "xiaohongshu" }
+      .sort_by { |entry| entry.fetch("path") }
+      .map do |entry|
+        source_path = File.join(social_output_root, entry.fetch("path"))
+        next unless File.file?(source_path)
+
+        {
+          "path" => entry.fetch("path"),
+          "title" => entry.fetch("title"),
+          "source_path" => source_path,
+        }
+      end.compact
+  end
+
+  def companion_assets_root(source_path, frontmatter)
+    companion_media = frontmatter["companion_media"]
+    unless companion_media.to_s.empty?
+      vault_root = source_path.tr("\\", "/").sub(%r{/raw/publish/.*\z}, "")
+      resolved = File.expand_path(companion_media, vault_root)
+      return resolved if File.directory?(resolved)
+    end
+
+    File.join(File.dirname(source_path), "assets", File.basename(source_path, ".md"))
+  end
+
+  def social_output_root_for(publish_assets_root)
+    candidates = Dir.glob(File.join(publish_assets_root, "**", "output")).select do |path|
+      File.directory?(path) && File.file?(File.join(path, "manifest.json"))
+    end
+
+    candidates.min_by { |path| path.count("/") }
   end
 
   def resolve_asset_path(source_path, target)
@@ -177,9 +259,10 @@ module ContentSync
     end
 
     summary_source = paragraph || frontmatter.fetch("title")
-    first_sentence = summary_source[/.*?[。！？.!?]/] || summary_source
+    cleaned = summary_source.gsub(/\*\*/, "").gsub(/`[^`]*`/, "…").strip
+    first_sentence = cleaned[/.*?[。！？]/] || cleaned
 
-    first_sentence.gsub(/\*\*/, "").slice(0, 120)
+    first_sentence.slice(0, 120)
   end
 
   def private_path(source_path)

@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { marked } from "marked";
 
@@ -12,6 +12,7 @@ export type ArticleFrontmatter = {
   status: "draft" | "ready" | "published" | "archived";
   summary: string;
   cover?: string;
+  carousel?: string[];
   tags: string[];
   discussion?: {
     issue?: number;
@@ -30,6 +31,11 @@ export type ArticleTocItem = {
   text: string;
 };
 
+export type CarouselSlide = {
+  path: string;
+  title: string;
+};
+
 export type Article = {
   frontmatter: ArticleFrontmatter;
   body: string;
@@ -37,6 +43,7 @@ export type Article = {
   readingMinutes: number;
   sourcePath: string;
   toc: ArticleTocItem[];
+  carouselSlides: CarouselSlide[];
 };
 
 export function getArticles(): Article[] {
@@ -66,6 +73,7 @@ function readArticle(path: string): Article {
   const frontmatter = parseFrontmatter(match[1], basename(path, ".md"));
   const body = stripDuplicateTitle(match[2].trim(), frontmatter.title);
   const toc = extractToc(body);
+  const carouselSlides = loadCarouselSlides(frontmatter.slug, frontmatter.carousel);
   const parsedHtml = marked.parse(body, { async: false }) as string;
   const html = enhanceTables(rewriteAssetPaths(addHeadingIds(parsedHtml, toc)));
   const words = body.replace(/```[\s\S]*?```/g, "").length;
@@ -77,6 +85,7 @@ function readArticle(path: string): Article {
     readingMinutes: Math.max(1, Math.ceil(words / 550)),
     sourcePath: path,
     toc,
+    carouselSlides,
   };
 }
 
@@ -117,6 +126,7 @@ function parseFrontmatter(source: string, fallbackSlug: string): ArticleFrontmat
     status: data.status ?? "draft",
     summary: data.summary ?? "",
     cover: typeof data.cover === "string" ? data.cover : undefined,
+    carousel: Array.isArray(data.carousel) ? data.carousel : [],
     tags: Array.isArray(data.tags) ? data.tags : [],
     discussion: data.discussion ?? {},
     formats: data.formats ?? {},
@@ -151,6 +161,30 @@ function stripDuplicateTitle(body: string, title: string): string {
   }
 
   return body;
+}
+
+function loadCarouselSlides(slug: string, carouselPaths: string[] = []): CarouselSlide[] {
+  const manifestPath = resolve(repoRoot, "content/assets/articles", slug, "carousel-manifest.json");
+
+  if (existsSync(manifestPath)) {
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8")) as { slides?: CarouselSlide[] };
+    if (Array.isArray(manifest.slides) && manifest.slides.length > 0) {
+      return manifest.slides;
+    }
+  }
+
+  return carouselPaths.map((path, index) => ({
+    path,
+    title: `Slide ${index + 1}`,
+  }));
+}
+
+export function assetHref(path?: string): string | undefined {
+  if (!path) return undefined;
+
+  const base = process.env.GITHUB_PAGES === "true" ? "/mind-os-public" : "";
+  const normalized = path.replace(/^\.\.\//, "");
+  return `${base}/${normalized}`.replace(/\/{2,}/g, "/");
 }
 
 function rewriteAssetPaths(html: string): string {
