@@ -142,6 +142,12 @@ module ContentSync
   end
 
   def resolve_cover_path(source_path, slug, frontmatter)
+    explicit_cover = frontmatter["cover_image"]
+    unless explicit_cover.to_s.empty?
+      resolved_cover = resolve_asset_path(source_path, explicit_cover)
+      return resolved_cover if resolved_cover
+    end
+
     publish_assets_root = companion_assets_root(source_path, frontmatter)
     source_name = File.basename(source_path, ".md")
     date_prefix = source_name[/\A\d{4}-\d{2}-\d{2}/]

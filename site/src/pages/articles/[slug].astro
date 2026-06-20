@@ -65,6 +65,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "和 git worktree 分工不同：worktree 隔离运行时，泳道隔离提交历史；强隔离用 worktree，同目录整理用泳道。",
     "试点前记住硬边界：不要碰 gitbutler/workspace，Agent 只本地 commit 不自动 push，大改历史前先 but oplog snapshot。",
   ],
+  "claude-code-expertise": [
+    "Anthropic 对 398,198 个 Claude Code 会话的分析说明：AI 越能执行，越奖励懂业务、懂系统边界的人。",
+    "Claude Code 已经不只是修 bug 工具，真实使用正在扩展到写代码、测试、部署、配置、理解系统、规划变更、数据分析和文档沟通。",
+    "典型分工是人负责约 70% 的规划决策，AI 负责约 80% 的执行决策；高质量委托要给目标、禁区和验收标准。",
+    "专家用户不是写更多步骤，而是给更清楚的约束；他们单条提示能触发更多动作和更长输出，因为执行空间被定义得更可靠。",
+    "AI 降低的是实现门槛，抬高的是验收门槛；程序员壁垒正在转向系统判断、工程边界、风险意识和业务语义理解。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);
