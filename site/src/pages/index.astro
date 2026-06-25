@@ -22,13 +22,20 @@ const articleHref = (slug: string) => `${base}articles/${slug}`;
         <a class="button secondary" href="https://github.com/zhlkkk/mind-os-public/issues">参与讨论</a>
       </div>
     </div>
-    <div class="hero-panel" aria-label="内容流示意">
+    <div class="hero-panel" aria-label="内容流和微信公众号关注入口">
       <div class="flow-node warm">raw/publish</div>
       <div class="flow-line"></div>
       <div class="flow-node coral">content/articles</div>
       <div class="flow-line"></div>
       <div class="flow-node teal">GitHub Issues</div>
       <p>脱敏、同步、绑定讨论线程，让正文和反馈各司其职。</p>
+      <div class="wechat-follow">
+        <img src={`${base}wechat-qrcode.jpg`} alt="微信公众号二维码" loading="lazy" />
+        <div>
+          <strong>微信公众号</strong>
+          <span>扫码关注，接收文章更新。</span>
+        </div>
+      </div>
     </div>
   </section>
 
