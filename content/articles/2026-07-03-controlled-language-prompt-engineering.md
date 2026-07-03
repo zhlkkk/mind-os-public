@@ -484,5 +484,3 @@ Prompt / Agent / Skill：
   https://docs.anthropic.com/en/docs/claude-code/skills
 - OpenAI Codex Skills 文档：  
   https://developers.openai.com/codex/skills
-
-公众号发布时还有一个更稳的做法：把这些资料整理成一个“阅读资料包”，放到文末，用关键词回复或二维码承接。正文只保留最关键的 5-8 个来源，避免文末链接过长影响阅读。
