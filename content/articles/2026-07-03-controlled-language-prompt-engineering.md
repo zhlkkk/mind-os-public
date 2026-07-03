@@ -437,50 +437,31 @@ Week 4: Add the rules to review
 
 清晰表达和受控语言背景：
 
-- Basic English 介绍与词表：  
-  http://ogden.basic-english.org/
-- C. K. Ogden, *Basic English: A general introduction with rules and grammar*, 1930。书目信息见 Max Planck Institute publication record：  
-  https://www.mpi.nl/publications/item2366945/basic-english-general-introduction-rules-and-grammar
-- Plain English Campaign 免费指南：  
-  https://www.plainenglish.co.uk/free-guides.html
-- U.S. Plain Language Guidelines：  
-  https://www.plainlanguage.gov/guidelines/
+- [Basic English 介绍与词表](http://ogden.basic-english.org/)
+- C. K. Ogden, *Basic English: A general introduction with rules and grammar*, 1930。书目信息见 [Max Planck Institute publication record](https://www.mpi.nl/publications/item2366945/basic-english-general-introduction-rules-and-grammar)
+- [Plain English Campaign 免费指南](https://www.plainenglish.co.uk/free-guides.html)
+- [U.S. Plain Language Guidelines](https://www.plainlanguage.gov/guidelines/)
 
 技术文档写作：
 
-- Google Developer Documentation Style Guide：  
-  https://developers.google.com/style
-- Microsoft Writing Style Guide：  
-  https://learn.microsoft.com/en-us/style-guide/welcome/
-- IBM Style Guide：  
-  https://www.ibm.com/docs/en/technical-content?topic=standards-style
-- Write the Docs Documentation Guide：  
-  https://www.writethedocs.org/guide/
-- Write the Docs: Docs as Code：  
-  https://www.writethedocs.org/guide/docs-as-code/
+- [Google Developer Documentation Style Guide](https://developers.google.com/style)
+- [Microsoft Writing Style Guide](https://learn.microsoft.com/en-us/style-guide/welcome/)
+- [IBM Style Guide](https://www.ibm.com/docs/en/technical-content?topic=standards-style)
+- [Write the Docs Documentation Guide](https://www.writethedocs.org/guide/)
+- [Write the Docs: Docs as Code](https://www.writethedocs.org/guide/docs-as-code/)
 
 受控语言和工具：
 
-- ASD-STE100 官方网站：  
-  https://www.asd-ste100.org/
-- HyperSTE：STE 检查工具：  
-  https://hyperste.ai/asd-ste100/
-- Acrolinx：内容治理和术语一致性工具：  
-  https://www.acrolinx.com/for-technical-communication/
-- Controlled Natural Language SIG：  
-  https://www.sigcnl.org/
-- A Survey and Classification of Controlled Natural Languages：  
-  https://direct.mit.edu/coli/article/40/1/121/1455/A-Survey-and-Classification-of-Controlled-Natural
+- [ASD-STE100 官方网站](https://www.asd-ste100.org/)
+- [HyperSTE：STE 检查工具](https://hyperste.ai/asd-ste100/)
+- [Acrolinx：内容治理和术语一致性工具](https://www.acrolinx.com/for-technical-communication/)
+- [Controlled Natural Language SIG](https://www.sigcnl.org/)
+- [A Survey and Classification of Controlled Natural Languages](https://direct.mit.edu/coli/article/40/1/121/1455/A-Survey-and-Classification-of-Controlled-Natural)
 
 Prompt / Agent / Skill：
 
-- OpenAI Prompt Engineering Best Practices：  
-  https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api
-- Microsoft Prompt Engineering Techniques：  
-  https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/prompt-engineering
-- Anthropic Agent Skills 工程博客：  
-  https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills
-- Claude Code Skills 文档：  
-  https://docs.anthropic.com/en/docs/claude-code/skills
-- OpenAI Codex Skills 文档：  
-  https://developers.openai.com/codex/skills
+- [OpenAI Prompt Engineering Best Practices](https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api)
+- [Microsoft Prompt Engineering Techniques](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/prompt-engineering)
+- [Anthropic Agent Skills 工程博客](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
+- [Claude Code Skills 文档](https://docs.anthropic.com/en/docs/claude-code/skills)
+- [OpenAI Codex Skills 文档](https://developers.openai.com/codex/skills)
