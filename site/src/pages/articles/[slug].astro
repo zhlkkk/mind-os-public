@@ -72,6 +72,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "专家用户不是写更多步骤，而是给更清楚的约束；他们单条提示能触发更多动作和更长输出，因为执行空间被定义得更可靠。",
     "AI 降低的是实现门槛，抬高的是验收门槛；程序员壁垒正在转向系统判断、工程边界、风险意识和业务语义理解。",
   ],
+  "controlled-language-prompt-engineering": [
+    "受控语言不是新造概念，而是一组限制词汇、语法和语义的写作方法，用来减少歧义、提升可读性，并让机器更稳定地处理文本。",
+    "Basic English、Plain English 和 Simplified Technical English 的共同点，是用规则换取理解稳定性。",
+    "软件团队不必照搬航空版 STE，更适合组合使用 Plain English、开发者文档风格指南、Docs as Code 和少量 STE 规则。",
+    "Prompt Engineering 的很多问题不是模型玄学，而是语言边界不清：模糊词、长句、多重意图和缺少验收标准都会扩大解释空间。",
+    "团队要把清楚变成规则：触发条件、操作词、流程、输出格式、停止条件和验证方法都应该写进文档、模板或 Skill。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);

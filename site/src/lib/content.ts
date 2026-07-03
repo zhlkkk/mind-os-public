@@ -196,8 +196,9 @@ function rewriteAssetPaths(html: string): string {
 
 function extractToc(body: string): ArticleTocItem[] {
   const counts = new Map<string, number>();
+  const bodyWithoutCode = body.replace(/```[\s\S]*?```/g, "");
 
-  return Array.from(body.matchAll(/^(#{2,3})\s+(.+)$/gm)).map((match, index) => {
+  return Array.from(bodyWithoutCode.matchAll(/^(#{2,3})\s+(.+)$/gm)).map((match, index) => {
     const depth = match[1].length as 2 | 3;
     const text = stripMarkdown(match[2]).trim();
     const baseId = slugifyHeading(text) || `section-${index + 1}`;

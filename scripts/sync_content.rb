@@ -55,7 +55,7 @@ module ContentSync
       "---",
       "title: #{frontmatter.fetch("title")}",
       "slug: #{slug}",
-      "date: #{frontmatter.fetch("date")}",
+      "date: #{public_date(frontmatter, source_path)}",
       "status: ready",
       "summary: #{summary}",
     ]
@@ -64,7 +64,7 @@ module ContentSync
     lines << "carousel: #{inline_array(carousel.fetch(:paths, []))}" if carousel.fetch(:paths, []).any?
 
     lines.concat([
-      "tags: #{inline_array(frontmatter.fetch("tags", []))}",
+      "tags: #{inline_array(public_tags(frontmatter))}",
       "origin:",
       "  private_path: #{private_path(source_path)}",
       "discussion:",
@@ -155,6 +155,7 @@ module ContentSync
     social_output_root = social_output_root_for(publish_assets_root)
 
     candidates = [
+      File.join(publish_assets_root, "cover.png"),
       File.join(publish_assets_root, source_name, "cover.png"),
       File.join(publish_assets_root, slug, "cover.png"),
       File.join(publish_assets_root, slug_without_date, "cover.png"),
@@ -254,6 +255,24 @@ module ContentSync
     return explicit_slug unless explicit_slug.to_s.empty?
 
     File.basename(source_path, ".md").sub(/\A\d{4}-\d{2}-\d{2}-/, "")
+  end
+
+  def public_date(frontmatter, source_path)
+    explicit_date = frontmatter["date"]
+    return explicit_date unless explicit_date.to_s.empty?
+
+    created_date = frontmatter["created"]
+    return created_date unless created_date.to_s.empty?
+
+    File.basename(source_path)[/\A\d{4}-\d{2}-\d{2}/] || Date.today.iso8601
+  end
+
+  def public_tags(frontmatter)
+    internal_tags = %w[publish draft]
+    tags = Array(frontmatter.fetch("tags", [])).reject { |tag| internal_tags.include?(tag.to_s) }
+    return tags unless tags.empty?
+
+    []
   end
 
   def public_summary(frontmatter, body)

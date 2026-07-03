@@ -456,11 +456,14 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 9px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
+  max-width: 100%;
   min-height: 30px;
   padding: 0 10px;
   border-radius: 5px;
@@ -468,6 +471,7 @@ h2 {
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .tone-1 {
@@ -987,6 +991,44 @@ h2 {
   line-height: 1.75;
 }
 
+.article-content .pull-quote {
+  max-width: 100%;
+  margin: 30px 0;
+  padding: 18px 20px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(68, 45, 24, 0.08);
+  overflow-wrap: anywhere;
+}
+
+.article-content .pull-quote p {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+.article-content .pull-quote small {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.article-content .pull-quote-amber {
+  background: linear-gradient(180deg, rgba(240, 226, 188, 0.84), rgba(255, 253, 250, 0.78));
+}
+
+.article-content .pull-quote-teal {
+  background: linear-gradient(180deg, rgba(219, 236, 232, 0.88), rgba(255, 253, 250, 0.78));
+}
+
+.article-content .pull-quote-rose {
+  background: linear-gradient(180deg, rgba(245, 223, 215, 0.88), rgba(255, 253, 250, 0.78));
+}
+
 .article-content img {
   display: block;
   width: min(100%, 980px);
@@ -1001,9 +1043,10 @@ h2 {
   max-width: 100%;
   overflow-x: auto;
   padding: 18px;
+  border: 1px solid var(--inline-code-border);
   border-radius: 8px;
-  background: #29231d;
-  color: #fff0d5;
+  background: rgba(246, 240, 230, 0.88);
+  color: var(--ink-soft);
 }
 
 .article-content pre code {
@@ -1053,9 +1096,16 @@ h2 {
 }
 
 @media (max-width: 960px) {
+  .article-page {
+    left: auto;
+    width: 100%;
+    max-width: 100%;
+    transform: none;
+  }
+
   .article-reading-layout {
     display: block;
-    width: min(100% - 28px, 1040px);
+    width: min(calc(100vw - 28px), 1040px);
   }
 
   .article-toc {
@@ -1116,15 +1166,19 @@ h2 {
 
   .hero-copy,
   .hero-panel,
+  .article-hero,
   .section-band,
   .article-list,
   .article-row,
-  .article-row .article-main {
+  .article-row .article-main,
+  .article-speed-read,
+  .article-content {
     min-width: 0;
     max-width: 100%;
   }
 
   h1,
+  .article-hero h1,
   h2,
   .lead,
   .article-summary,
@@ -1133,6 +1187,25 @@ h2 {
   .article-row .article-main small {
     overflow-wrap: anywhere;
     word-break: break-all;
+  }
+
+  .article-hero h1,
+  .article-hero .article-summary,
+  .article-meta,
+  .tags,
+  .article-speed-read,
+  .speed-read-list,
+  .article-content .pull-quote,
+  .article-content .pull-quote p,
+  .article-content .pull-quote small {
+    width: 100%;
+    max-width: calc(100vw - 28px);
+    white-space: normal;
+  }
+
+  .article-speed-read,
+  .article-content {
+    overflow-x: hidden;
   }
 
   .hero-panel {
@@ -1198,6 +1271,8 @@ h2 {
     grid-template-columns: 1fr;
     gap: 12px;
     padding: 16px 0;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .speed-read-heading {
@@ -1217,6 +1292,11 @@ h2 {
   .speed-read-list {
     grid-template-columns: 1fr;
     gap: 9px;
+  }
+
+  .speed-read-list li {
+    overflow-wrap: anywhere;
+    word-break: break-all;
   }
 
   .article-content {
@@ -1239,6 +1319,23 @@ h2 {
   .article-content blockquote {
     padding-left: 15px;
     font-size: 15px;
+  }
+
+  .article-content .pull-quote {
+    margin: 24px 0;
+    padding: 16px;
+    overflow: hidden;
+  }
+
+  .article-content .pull-quote p {
+    font-size: 20px;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+  }
+
+  .article-content .pull-quote small {
+    overflow-wrap: anywhere;
+    word-break: break-all;
   }
 
   .article-content img {
