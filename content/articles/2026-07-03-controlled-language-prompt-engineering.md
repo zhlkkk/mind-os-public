@@ -39,7 +39,7 @@ formats:
 
 先看 Basic English、Plain English、STE 这三条线，再回到软件/IT 技术写作、Prompt、Skills 和团队规范。
 
-## 三个入口
+## #1 三个入口
 
 Basic English、Plain English、Simplified Technical English 不是一个官方“三分法”。
 
@@ -159,7 +159,7 @@ Disconnect the hose.
 
 **作者把动作拆开后，执行者不需要猜顺序。**
 
-## 软件/IT 更常用什么？
+## #2 软件/IT 更常用什么？
 
 软件行业更常用几类灵活规范。
 
@@ -168,6 +168,42 @@ Disconnect the hose.
 可以直接读 Google Developer Documentation Style Guide 和 Microsoft Writing Style Guide。它们都强调清晰、简洁、一致、主动语态、用户视角。Google 的指南还建议把条件放在指令前面，这一点和受控技术写作很接近。
 
 如果你写 README、API 文档、部署说明、教程、内部平台文档，这类指南比原版 STE 更适合日常使用。
+
+它们真正有用的地方，不是告诉你“写得清楚一点”，而是把清楚拆成可执行的写法。
+
+比如，先把用户动作写清楚：
+
+```text
+Before:
+The configuration file should be modified before the service is restarted.
+
+After:
+Update the configuration file.
+Restart the service.
+```
+
+再比如，把条件放在动作前：
+
+```text
+Before:
+Click Delete if you want to remove the API key.
+
+After:
+If you want to remove the API key, click Delete.
+```
+
+再比如，用用户视角写错误处理：
+
+```text
+Before:
+An error may occur when the token is invalid.
+
+After:
+If the token is invalid, the API returns 401 Unauthorized.
+Create a new token and send the request again.
+```
+
+这些例子看起来不高级，但很接近 Google 和 Microsoft 文档风格指南的共同方向：短句、主动语态、读者动作、条件清楚、结果可验证。
 
 第二类是 **Docs as Code**。
 
@@ -185,7 +221,7 @@ Acrolinx、HyperSTE 这类工具可以检查术语一致性、语气、风格、
 
 **STE 是受控技术写作的代表。软件/IT 团队更适合组合使用 Plain English、Google/Microsoft 风格指南、Docs as Code 和少量 STE 规则。**
 
-## 技术人员怎么用：从沟通到文档
+## #3 技术人员怎么用：从沟通到文档
 
 如果你在外企或跨国团队沟通：
 
@@ -263,7 +299,7 @@ When <condition> is true:
 
 这份指南不追求完整。它先把团队最容易写乱的地方固定下来：步骤、术语、边界、验证和失败处理。
 
-## 再回到 Prompt：AI 也是一种读者
+## #4 再回到 Prompt：AI 也是一种读者
 
 回到 Prompt Engineering，很多问题并不神秘。
 
@@ -295,7 +331,7 @@ Report the changed files and verification results.
 
 这段指令更长，也更可执行。
 
-## 从 Prompt 到 Skill：把经验变成团队能力
+## #5 从 Prompt 到 Skill：把经验变成团队能力
 
 单次 Prompt 解决“这次怎么说清楚”。Skill 需要处理重复触发、资源加载、验证和停止条件。你写 Claude Code、Codex、Cursor 或其他 Agent 使用的 Skill 时，就是在设计一个可反复触发的能力模块。
 
@@ -370,7 +406,7 @@ Week 4: Add the rules to review
 
 ![prompt-skill-spec.png](../assets/articles/controlled-language-prompt-engineering/prompt-skill-spec.png)
 
-## 一张检查表
+## #6 一张检查表
 
 写邮件、写文档、写 Prompt，都可以用这张表检查：
 
@@ -395,37 +431,58 @@ Week 4: Add the rules to review
 
 如果你觉得文末这份检查表有用，欢迎转发给你的团队，或直接丢到工作群里。
 
-## 延伸资料与引用
+## #7 延伸资料与引用
 
 本文基于作者内部整理稿和以下公开资料改写。
 
 清晰表达和受控语言背景：
 
-- [Basic English 介绍与词表](http://ogden.basic-english.org/)
-- C. K. Ogden, *Basic English: A general introduction with rules and grammar*, 1930，书目信息见 [Max Planck Institute publication record](https://www.mpi.nl/publications/item2366945/basic-english-general-introduction-rules-and-grammar)
-- [Plain English Campaign 免费指南](https://www.plainenglish.co.uk/free-guides.html)
-- [U.S. Plain Language Guidelines](https://www.plainlanguage.gov/guidelines/)
+- Basic English 介绍与词表：  
+  http://ogden.basic-english.org/
+- C. K. Ogden, *Basic English: A general introduction with rules and grammar*, 1930。书目信息见 Max Planck Institute publication record：  
+  https://www.mpi.nl/publications/item2366945/basic-english-general-introduction-rules-and-grammar
+- Plain English Campaign 免费指南：  
+  https://www.plainenglish.co.uk/free-guides.html
+- U.S. Plain Language Guidelines：  
+  https://www.plainlanguage.gov/guidelines/
 
 技术文档写作：
 
-- [Google Developer Documentation Style Guide](https://developers.google.com/style)
-- [Microsoft Writing Style Guide](https://learn.microsoft.com/en-us/style-guide/welcome/)
-- [IBM Style Guide](https://www.ibm.com/docs/en/technical-content?topic=standards-style)
-- [Write the Docs Documentation Guide](https://www.writethedocs.org/guide/)
-- [Write the Docs: Docs as Code](https://www.writethedocs.org/guide/docs-as-code/)
+- Google Developer Documentation Style Guide：  
+  https://developers.google.com/style
+- Microsoft Writing Style Guide：  
+  https://learn.microsoft.com/en-us/style-guide/welcome/
+- IBM Style Guide：  
+  https://www.ibm.com/docs/en/technical-content?topic=standards-style
+- Write the Docs Documentation Guide：  
+  https://www.writethedocs.org/guide/
+- Write the Docs: Docs as Code：  
+  https://www.writethedocs.org/guide/docs-as-code/
 
 受控语言和工具：
 
-- [ASD-STE100 官方网站](https://www.asd-ste100.org/)
-- [HyperSTE：STE 检查工具](https://hyperste.ai/asd-ste100/)
-- [Acrolinx：内容治理和术语一致性工具](https://www.acrolinx.com/for-technical-communication/)
-- [Controlled Natural Language SIG](https://www.sigcnl.org/)
-- [A Survey and Classification of Controlled Natural Languages](https://direct.mit.edu/coli/article/40/1/121/1455/A-Survey-and-Classification-of-Controlled-Natural)
+- ASD-STE100 官方网站：  
+  https://www.asd-ste100.org/
+- HyperSTE：STE 检查工具：  
+  https://hyperste.ai/asd-ste100/
+- Acrolinx：内容治理和术语一致性工具：  
+  https://www.acrolinx.com/for-technical-communication/
+- Controlled Natural Language SIG：  
+  https://www.sigcnl.org/
+- A Survey and Classification of Controlled Natural Languages：  
+  https://direct.mit.edu/coli/article/40/1/121/1455/A-Survey-and-Classification-of-Controlled-Natural
 
 Prompt / Agent / Skill：
 
-- [OpenAI Prompt Engineering Best Practices](https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api)
-- [Microsoft Prompt Engineering Techniques](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/prompt-engineering)
-- [Anthropic Agent Skills 工程博客](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
-- [Claude Code Skills 文档](https://docs.anthropic.com/en/docs/claude-code/skills)
-- [OpenAI Codex Skills 文档](https://developers.openai.com/codex/skills)
+- OpenAI Prompt Engineering Best Practices：  
+  https://help.openai.com/en/articles/6654000-best-practices-for-prompt-engineering-with-the-openai-api
+- Microsoft Prompt Engineering Techniques：  
+  https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/prompt-engineering
+- Anthropic Agent Skills 工程博客：  
+  https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills
+- Claude Code Skills 文档：  
+  https://docs.anthropic.com/en/docs/claude-code/skills
+- OpenAI Codex Skills 文档：  
+  https://developers.openai.com/codex/skills
+
+公众号发布时还有一个更稳的做法：把这些资料整理成一个“阅读资料包”，放到文末，用关键词回复或二维码承接。正文只保留最关键的 5-8 个来源，避免文末链接过长影响阅读。
