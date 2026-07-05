@@ -5,7 +5,7 @@ const isGitHubPages = process.env.GITHUB_PAGES === "true";
 
 export default defineConfig({
   integrations: [mdx()],
-  site: "https://zhlkkk.github.io/mind-os-public",
+  site: "https://kain-ai.xyz/mind-os-public",
   base: isGitHubPages ? "/mind-os-public" : "/",
   output: "static",
 });
