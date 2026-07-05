@@ -182,14 +182,12 @@ function loadCarouselSlides(slug: string, carouselPaths: string[] = []): Carouse
 export function assetHref(path?: string): string | undefined {
   if (!path) return undefined;
 
-  const base = process.env.GITHUB_PAGES === "true" ? "/mind-os-public" : "";
   const normalized = path.replace(/^\.\.\//, "");
-  return `${base}/${normalized}`.replace(/\/{2,}/g, "/");
+  return `/${normalized}`.replace(/\/{2,}/g, "/");
 }
 
 function rewriteAssetPaths(html: string): string {
-  const base = process.env.GITHUB_PAGES === "true" ? "/mind-os-public" : "";
-  const assetBase = `${base}/assets/`.replace(/^\/\//, "/");
+  const assetBase = "/assets/";
 
   return html.replace(/src="\.\.\/assets\//g, `src="${assetBase}`);
 }

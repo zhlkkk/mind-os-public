@@ -37,7 +37,7 @@ npm run build
 GitHub Pages 构建会设置 `GITHUB_PAGES=true`，站点发布到：
 
 ```text
-https://zhlkkk.github.io/mind-os-public/
+https://kain-ai.xyz/
 ```
 
 ## 内容读取
