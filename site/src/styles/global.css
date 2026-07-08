@@ -524,7 +524,7 @@ h2 {
 
 .article-toc {
   grid-column: 1;
-  grid-row: 3;
+  grid-row: 3 / span 2;
   position: sticky;
   top: 28px;
   align-self: start;
