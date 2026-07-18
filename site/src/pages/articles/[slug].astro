@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { assetHref, getArticleBySlug, getArticles } from "@/lib/content";
+import { formatDiscussionLabel } from "@/lib/discussion";
 
 export function getStaticPaths() {
   return getArticles().map((article) => ({
@@ -16,6 +17,7 @@ const discussionUrl =
     : undefined;
 const discussionIssue =
   typeof article.frontmatter.discussion?.issue === "number" ? article.frontmatter.discussion.issue : undefined;
+const discussionLabel = formatDiscussionLabel(discussionIssue);
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 const tocSections = article.toc.reduce<Array<(typeof article.toc)[number] & { children: typeof article.toc }>>(
   (sections, item) => {
@@ -79,6 +81,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "Prompt Engineering 的很多问题不是模型玄学，而是语言边界不清：模糊词、长句、多重意图和缺少验收标准都会扩大解释空间。",
     "团队要把清楚变成规则：触发条件、操作词、流程、输出格式、停止条件和验证方法都应该写进文档、模板或 Skill。",
   ],
+  "ai-learning-tool-or-crutch": [
+    "只看答案是否正确，七年级学生的探究能力平均得分是 45.9%；加入理由降到 25.4%，再要求答案、理由都有信心，只剩 17.9%。变的不是学生，而是理解证据的门槛。",
+    "普通聊天式 AI 能让练习成绩短期提高，但撤掉 AI 后，学生的独立考试成绩可能反而更低；能交付答案，不等于能独立重建推理。",
+    "AI 的效果取决于谁在主导判断：让它提供提示、纠错和变式练习，AI 是认知放大器；直接接受完整输出，它就可能替代本该发生的思考。",
+    "关掉 AI 后做四步检查：用自己的话复述，说出关键依据，标出确定与不确定，再改变一个条件完成迁移。",
+    "更稳妥的工作流是使用前先留下自己的判断，使用中要求 AI 反问和提示，使用后再独立检查；文章附有可直接下载的两个学习助手。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);
@@ -102,7 +111,7 @@ const carouselSlides = article.carouselSlides
           <div class="tags">
             {article.frontmatter.tags.map((tag, index) => <span class={`tag tone-${(index % 5) + 1}`}>{tag}</span>)}
           </div>
-          {discussionUrl && <a class="button primary compact" href={discussionUrl}>参与讨论 #{discussionIssue}</a>}
+          {discussionUrl && <a class="button primary compact" href={discussionUrl}>{discussionLabel}</a>}
         </div>
       </header>
 
@@ -199,6 +208,17 @@ const carouselSlides = article.carouselSlides
       </section>
 
       <div class="article-content" set:html={article.html} />
+
+      {discussionUrl && (
+        <aside class="article-discussion" aria-labelledby="discussion-title">
+          <div>
+            <p class="toc-kicker">Open Thread{discussionIssue !== undefined && ` · #${discussionIssue}`}</p>
+            <h2 id="discussion-title">继续这篇文章的讨论</h2>
+            <p>欢迎补充实践、反例、问题或勘误，让正文之外的经验继续沉淀。</p>
+          </div>
+          <a class="button primary" href={discussionUrl}>参与讨论</a>
+        </aside>
+      )}
     </div>
   </article>
 
