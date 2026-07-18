@@ -1010,6 +1010,7 @@ h2 {
 .article-content a {
   color: var(--teal);
   font-weight: 700;
+  overflow-wrap: anywhere;
   text-decoration-color: rgba(49, 125, 120, 0.38);
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
