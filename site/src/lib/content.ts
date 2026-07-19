@@ -75,7 +75,7 @@ function readArticle(path: string): Article {
   const toc = extractToc(body);
   const carouselSlides = loadCarouselSlides(frontmatter.slug, frontmatter.carousel);
   const parsedHtml = marked.parse(body, { async: false }) as string;
-  const html = enhanceTables(rewriteAssetPaths(addHeadingIds(parsedHtml, toc)));
+  const html = enhanceBlockquotes(enhanceTables(rewriteAssetPaths(addHeadingIds(parsedHtml, toc))));
   const words = body.replace(/```[\s\S]*?```/g, "").length;
 
   return {
@@ -213,12 +213,25 @@ function extractToc(body: string): ArticleTocItem[] {
 
 function addHeadingIds(html: string, toc: ArticleTocItem[]): string {
   let index = 0;
+  let sectionIndex = 0;
 
-  return html.replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (heading, depth) => {
+  return html.replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (heading, depth, content) => {
     const item = toc[index];
     index += 1;
 
     if (!item || item.depth !== Number(depth)) return heading;
+
+    if (depth === "2") {
+      sectionIndex += 1;
+      const isConclusion = /^(结语|总结|结论)/.test(item.text);
+      const marker = isConclusion ? "∞" : String(sectionIndex).padStart(2, "0");
+      const title = content
+        .replace(/^#?\d+[.、]?\s*/, "")
+        .replace(/^[一二三四五六七八九十]+[.、]\s*/, "")
+        .replace(/^(结语|总结|结论)[：:]\s*/, "");
+
+      return `<h2 id="${item.id}" class="editorial-section-heading"><span class="section-watermark" aria-hidden="true">${marker}</span><span class="section-kicker">${isConclusion ? "结语" : "章节"}</span><span class="section-title">${title}</span></h2>`;
+    }
 
     return heading.replace(`<h${depth}>`, `<h${depth} id="${item.id}">`);
   });
@@ -265,9 +278,9 @@ function enhanceTables(html: string): string {
     const tableStyle =
       "width:100%;table-layout:fixed;border-collapse:collapse;margin:18px 0;color:#27231f;font-size:14px;line-height:1.65;";
     const headerStyle =
-      "padding:8px 6px;border:1px solid #ddd7cf;background:#f0eeeb;color:#1f1c18;font-weight:700;text-align:center;vertical-align:middle;white-space:normal;word-break:break-all;overflow-wrap:anywhere;";
+      "padding:10px 8px;border:0;border-bottom:2px solid #c89231;background:#65452f;color:#fffdfa;font-weight:700;text-align:left;vertical-align:middle;white-space:normal;word-break:normal;overflow-wrap:anywhere;";
     const cellStyle =
-      "padding:8px 6px;border:1px solid #ddd7cf;text-align:center;vertical-align:middle;white-space:normal;word-break:break-all;overflow-wrap:anywhere;";
+      "padding:11px 8px;border:0;border-bottom:1px solid #e5dccd;text-align:left;vertical-align:middle;white-space:normal;word-break:normal;overflow-wrap:anywhere;";
 
     const headerHtml = headers
       .map((header, index) => `<th style="width:${columnWidths[index]}%;${headerStyle}">${header}</th>`)
@@ -287,6 +300,26 @@ function enhanceTables(html: string): string {
       .join("");
 
     return `<table style="${tableStyle}"><colgroup>${colgroup}</colgroup><thead><tr>${headerHtml}</tr></thead><tbody>${bodyHtml}</tbody></table>`;
+  });
+}
+
+function enhanceBlockquotes(html: string): string {
+  return html.replace(/<blockquote>\s*([\s\S]*?)<\/blockquote>/g, (_, content: string) => {
+    const paragraphs = Array.from(content.matchAll(/<p>([\s\S]*?)<\/p>/g));
+    const isDialogue =
+      paragraphs.length > 1 &&
+      paragraphs.every((paragraph) => /^\s*<strong>[^<]+[：:]<\/strong>/.test(paragraph[1]));
+
+    if (!isDialogue) {
+      return `<blockquote class="editorial-quote">${content}</blockquote>`;
+    }
+
+    const dialogue = content.replace(
+      /<p>\s*<strong>([^<]+[：:])<\/strong>\s*([\s\S]*?)<\/p>/g,
+      '<p><strong class="dialogue-speaker">$1</strong><span class="dialogue-copy">$2</span></p>',
+    );
+
+    return `<blockquote class="dialogue-blockquote" aria-label="对话实录">${dialogue}</blockquote>`;
   });
 }
 

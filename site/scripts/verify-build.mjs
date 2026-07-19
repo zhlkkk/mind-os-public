@@ -23,6 +23,14 @@ assert.equal((speedRead[0].match(/<li(?:\s|>)/g) ?? []).length, 5, "新文章应
 assert.match(article, /href="https:\/\/github\.com\/zhlkkk\/mind-os-public\/issues\/15"/);
 assert.match(article, /Open Thread[^<]* · #15/);
 assert.match(article, /href="\/assets\/articles\/ai-learning-tool-or-crutch\/learning-skills\.zip"/);
+assert.equal((article.match(/class="dialogue-blockquote"/g) ?? []).length, 1, "新文章应包含一个对话实录区块");
+assert.match(article, /class="dialogue-speaker">GPT-5\.6 Sol：<\/strong>/);
+assert.match(article, /class="dialogue-copy">请先收起原答案/);
+assert.match(article, /<blockquote class="editorial-quote">/);
+assert.equal((article.match(/class="editorial-section-heading"/g) ?? []).length, 12, "新文章应包含 12 个编辑式章节标题");
+assert.match(article, /class="section-watermark" aria-hidden="true">01<\/span>/);
+assert.match(article, /class="section-watermark" aria-hidden="true">∞<\/span><span class="section-kicker">结语<\/span>/);
+assert.match(article, /class="section-title">三套判分标准，越严越低/);
 
 const articleWithoutDiscussion = readArticle("gitbutler-agent-safe-git");
 assert.doesNotMatch(articleWithoutDiscussion, /class="article-discussion"/);
