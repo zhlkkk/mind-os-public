@@ -1065,15 +1065,23 @@ h2 {
   margin: 0.45em 0;
 }
 
+.article-content blockquote:has(> p > strong:first-child) {
+  color: var(--ink-soft);
+  font-family: var(--body);
+  font-style: normal;
+}
+
 .article-content blockquote:has(> p > strong:first-child) > p {
-  padding-left: 3.5em;
-  text-indent: -3.5em;
+  padding-left: 8em;
+  text-indent: -8em;
 }
 
 .article-content blockquote:has(> p > strong:first-child) > p > strong:first-child {
   display: inline-block;
-  width: 3.5em;
+  width: 8em;
   text-indent: 0;
+  vertical-align: top;
+  white-space: nowrap;
 }
 
 .article-content .pull-quote {
@@ -1473,6 +1481,18 @@ h2 {
   .article-content blockquote::before {
     left: 11px;
     font-size: 42px;
+  }
+
+  .article-content blockquote:has(> p > strong:first-child) > p {
+    padding-left: 0;
+    text-indent: 0;
+  }
+
+  .article-content blockquote:has(> p > strong:first-child) > p > strong:first-child {
+    display: block;
+    width: auto;
+    margin-bottom: 0.15em;
+    white-space: normal;
   }
 
   .article-content > p:first-of-type::first-letter {
