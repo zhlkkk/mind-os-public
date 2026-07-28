@@ -1265,12 +1265,34 @@ h2 {
   box-shadow: none;
 }
 
-.article-content p:has(> img) {
+.article-content p:has(> img),
+.article-content p:has(> a:only-child > img:only-child) {
   width: 100%;
   margin: 42px 0 14px;
 }
 
-.article-content p:has(> img) + p:has(> em:only-child) {
+.article-content p > a:only-child:has(> img:only-child) {
+  display: block;
+  position: relative;
+}
+
+.article-content p > a:only-child:has(> img:only-child)::after {
+  content: "查看原图 ↗";
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 253, 250, 0.5);
+  border-radius: 999px;
+  background: rgba(39, 35, 31, 0.78);
+  color: #fffdfa;
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+}
+
+.article-content p:has(> img) + p:has(> em:only-child),
+.article-content p:has(> a:only-child > img:only-child) + p:has(> em:only-child) {
   margin: 0 auto 34px;
   color: var(--muted);
   font-family: var(--mono);
@@ -1680,7 +1702,8 @@ h2 {
     box-shadow: none;
   }
 
-  .article-content p:has(> img) {
+  .article-content p:has(> img),
+  .article-content p:has(> a:only-child > img:only-child) {
     width: 100%;
     margin: 28px 0 10px;
   }

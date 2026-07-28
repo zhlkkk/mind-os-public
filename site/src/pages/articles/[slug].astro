@@ -88,6 +88,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "关掉 AI 后做四步检查：用自己的话复述，说出关键依据，标出确定与不确定，再改变一个条件完成迁移。",
     "更稳妥的工作流是使用前先留下自己的判断，使用中要求 AI 反问和提示，使用后再独立检查；文章附有可直接下载的两个学习助手。",
   ],
+  "claude-code-context-engineering": [
+    "Claude Code 团队删掉了 80% 以上的系统提示词，编码评测却没有可测量的性能下降：对新一代模型而言，旧护栏可能已经从保护变成摩擦。",
+    "六条转变指向同一方向：从规则转向判断、从示例转向接口设计、从一次塞满转向渐进式披露，并减少重复指令和把 CLAUDE.md 当长期记忆的做法。",
+    "实际审计时，安全与法律硬约束应保留；模型能从代码库推断的品味规则可以删除，专题流程则拆成按需加载的 Skill。",
+    "精简上下文并非没有代价：约束被内化进模型判断力后，旧模型和开源模型可能失去必要护栏，多模型切换也更容易受到影响。",
+    "更稳妥的做法是定期检查自动记忆、保留关键边界与完整版 fallback，并每隔一段时间重新判断哪些规则仍在解决真实问题。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);

@@ -45,4 +45,66 @@ for (const asset of ["cover.png", "learning-skills.zip"]) {
   );
 }
 
-console.log("构建产物校验通过：新文章、速读摘要、讨论入口与公开资源均完整。");
+const contextEngineeringArticle = readArticle("claude-code-context-engineering");
+const contextEngineeringSpeedRead = contextEngineeringArticle.match(
+  /<section class="article-speed-read"[\s\S]*?<\/section>/,
+);
+
+assert.ok(contextEngineeringSpeedRead, "上下文工程文章缺少 5 分钟速读区块");
+assert.equal(
+  (contextEngineeringSpeedRead[0].match(/<li(?:\s|>)/g) ?? []).length,
+  5,
+  "上下文工程文章应包含 5 条速读摘要",
+);
+assert.match(contextEngineeringArticle, /href="https:\/\/github\.com\/zhlkkk\/mind-os-public\/issues\/16"/);
+assert.match(contextEngineeringArticle, /Open Thread[^<]* · #16/);
+assert.equal(
+  (contextEngineeringArticle.match(/class="editorial-section-heading"/g) ?? []).length,
+  8,
+  "上下文工程文章应包含 8 个编辑式章节标题",
+);
+for (const title of [
+  "为什么删了反而更好",
+  "六条转变，每条都影响你的 CLAUDE.md",
+  "<code>claude doctor</code>：一键体检",
+  "效率优化，还是模型锁定？",
+  "自动记忆的坑",
+  "Opus 5 的负面信号",
+  "现在该做什么",
+  "更大的图",
+]) {
+  assert.match(
+    contextEngineeringArticle,
+    new RegExp(`<span class="section-title">${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</span>`),
+    `上下文工程文章章节标题缺失：${title}`,
+  );
+}
+
+for (const asset of [
+  "cover.png",
+  "01-80pct-reduction.png",
+  "02-six-transitions.png",
+  "03-lock-in-effect.png",
+  "04-context-vs-prompt.png",
+]) {
+  assert.ok(
+    existsSync(path.join(distRoot, "assets", "articles", "claude-code-context-engineering", asset)),
+    `上下文工程文章资源缺失：${asset}`,
+  );
+  assert.ok(
+    contextEngineeringArticle.includes(
+      `src="/assets/articles/claude-code-context-engineering/${asset}"`,
+    ),
+    `上下文工程文章未引用资源：${asset}`,
+  );
+  if (asset !== "cover.png") {
+    assert.ok(
+      contextEngineeringArticle.includes(
+        `href="/assets/articles/claude-code-context-engineering/${asset}"`,
+      ),
+      `上下文工程正文图缺少原图入口：${asset}`,
+    );
+  }
+}
+
+console.log("构建产物校验通过：文章、速读摘要、讨论入口与公开资源均完整。");
