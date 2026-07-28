@@ -1268,7 +1268,8 @@ h2 {
 .article-content p:has(> img),
 .article-content p:has(> a:only-child > img:only-child) {
   width: 100%;
-  margin: 42px 0 14px;
+  max-width: 980px;
+  margin: 42px auto 14px;
 }
 
 .article-content p > a:only-child:has(> img:only-child) {
@@ -1705,7 +1706,8 @@ h2 {
   .article-content p:has(> img),
   .article-content p:has(> a:only-child > img:only-child) {
     width: 100%;
-    margin: 28px 0 10px;
+    max-width: 100%;
+    margin: 28px auto 10px;
   }
 
   .article-content table {
