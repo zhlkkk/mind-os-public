@@ -95,6 +95,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "精简上下文并非没有代价：约束被内化进模型判断力后，旧模型和开源模型可能失去必要护栏，多模型切换也更容易受到影响。",
     "更稳妥的做法是定期检查自动记忆、保留关键边界与完整版 fallback，并每隔一段时间重新判断哪些规则仍在解决真实问题。",
   ],
+  "mind-os-content-pipeline": [
+    "这篇文章从 4072 条信息、30 份简报和 30 个候选选题出发，复盘一篇技术内容怎样进入可追踪的生产流程。",
+    "流水线被拆成五段：信号采集、知识整理、研究选题、研究写作与多平台交付；每一段都留下文件产物，下一段直接读取。",
+    "脚本负责去重、预演、幂等提交、路径守卫和完整写入，多个 Skill 负责提出不同判断，人则保留选题、证据、公开边界和发布确认权。",
+    "公众号、图卡和视频不能依靠一种万能格式：Markdown 管内容结构，HTML 管公众号样式，图片管固定版式，视频还需要分镜、音频和时间轴。",
+    "当前前四段已有本地实测，反馈回流仍未接通；下一步是用 project.yaml、SOURCES.md、BRIEF.md、DRAFT.md、REVIEW.md 和 outputs 组织端到端样例。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);

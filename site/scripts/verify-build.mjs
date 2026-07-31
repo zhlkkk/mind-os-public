@@ -107,4 +107,48 @@ for (const asset of [
   }
 }
 
+const contentPipelineArticle = readArticle("mind-os-content-pipeline");
+const contentPipelineSpeedRead = contentPipelineArticle.match(
+  /<section class="article-speed-read"[\s\S]*?<\/section>/,
+);
+
+assert.ok(contentPipelineSpeedRead, "内容流水线文章缺少 5 分钟速读区块");
+assert.equal(
+  (contentPipelineSpeedRead[0].match(/<li(?:\s|>)/g) ?? []).length,
+  5,
+  "内容流水线文章应包含 5 条速读摘要",
+);
+assert.match(contentPipelineArticle, /href="https:\/\/github\.com\/zhlkkk\/mind-os-public\/issues\/17"/);
+assert.match(contentPipelineArticle, /Open Thread[^<]* · #17/);
+assert.match(
+  contentPipelineArticle,
+  /<figure class="article-cover-hero">\s*<img src="\/assets\/articles\/mind-os-content-pipeline\/content-production-pipeline\.png"/,
+  "内容流水线文章未使用指定封面图",
+);
+assert.doesNotMatch(
+  contentPipelineArticle,
+  /longkai|\/Users\/|private\/obsidian/i,
+  "内容流水线公开页面包含私密路径或作者标识",
+);
+assert.equal(
+  (contentPipelineArticle.match(/class="editorial-section-heading"/g) ?? []).length,
+  8,
+  "内容流水线文章应包含 8 个编辑式章节标题",
+);
+
+for (const asset of ["content-production-pipeline.png", "pipeline-status.png"]) {
+  assert.ok(
+    existsSync(path.join(distRoot, "assets", "articles", "mind-os-content-pipeline", asset)),
+    `内容流水线文章资源缺失：${asset}`,
+  );
+  assert.ok(
+    contentPipelineArticle.includes(`src="/assets/articles/mind-os-content-pipeline/${asset}"`),
+    `内容流水线文章未引用资源：${asset}`,
+  );
+  assert.ok(
+    contentPipelineArticle.includes(`href="/assets/articles/mind-os-content-pipeline/${asset}"`),
+    `内容流水线正文图缺少原图入口：${asset}`,
+  );
+}
+
 console.log("构建产物校验通过：文章、速读摘要、讨论入口与公开资源均完整。");
