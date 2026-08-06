@@ -151,4 +151,50 @@ for (const asset of ["content-production-pipeline.png", "pipeline-status.png"]) 
   );
 }
 
+const contextWeaveArticle = readArticle("contextweave-agent-memory");
+const contextWeaveSpeedRead = contextWeaveArticle.match(
+  /<section class="article-speed-read"[\s\S]*?<\/section>/,
+);
+
+assert.ok(contextWeaveSpeedRead, "ContextWeave 文章缺少 5 分钟速读区块");
+assert.equal(
+  (contextWeaveSpeedRead[0].match(/<li(?:\s|>)/g) ?? []).length,
+  5,
+  "ContextWeave 文章应包含 5 条速读摘要",
+);
+assert.match(contextWeaveArticle, /href="https:\/\/github\.com\/zhlkkk\/mind-os-public\/issues\/18"/);
+assert.match(contextWeaveArticle, /Open Thread[^<]* · #18/);
+assert.match(
+  contextWeaveArticle,
+  /<figure class="article-cover-hero">\s*<img src="\/assets\/articles\/contextweave-agent-memory\/cover\.png"/,
+  "ContextWeave 文章未使用指定封面图",
+);
+assert.doesNotMatch(
+  contextWeaveArticle,
+  /longkai|\/Users\/|private\/obsidian/i,
+  "ContextWeave 公开页面包含私密路径或作者标识",
+);
+assert.equal(
+  (contextWeaveArticle.match(/class="editorial-section-heading"/g) ?? []).length,
+  6,
+  "ContextWeave 文章应包含 6 个编辑式章节标题",
+);
+
+for (const asset of ["cover.png", "contextweave-benefit-risk.png", "contextweave-reliable-use.png"]) {
+  assert.ok(
+    existsSync(path.join(distRoot, "assets", "articles", "contextweave-agent-memory", asset)),
+    `ContextWeave 文章资源缺失：${asset}`,
+  );
+  assert.ok(
+    contextWeaveArticle.includes(`src="/assets/articles/contextweave-agent-memory/${asset}"`),
+    `ContextWeave 文章未引用资源：${asset}`,
+  );
+  if (asset !== "cover.png") {
+    assert.ok(
+      contextWeaveArticle.includes(`href="/assets/articles/contextweave-agent-memory/${asset}"`),
+      `ContextWeave 正文图缺少原图入口：${asset}`,
+    );
+  }
+}
+
 console.log("构建产物校验通过：文章、速读摘要、讨论入口与公开资源均完整。");

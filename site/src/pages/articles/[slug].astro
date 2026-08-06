@@ -102,6 +102,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "公众号、图卡和视频不能依靠一种万能格式：Markdown 管内容结构，HTML 管公众号样式，图片管固定版式，视频还需要分镜、音频和时间轴。",
     "当前前四段已有本地实测，反馈回流仍未接通；下一步是用 project.yaml、SOURCES.md、BRIEF.md、DRAFT.md、REVIEW.md 和 outputs 组织端到端样例。",
   ],
+  "contextweave-agent-memory": [
+    "ContextWeave 从同一开源项目的长期编辑记录中重建 1,005 个可执行任务，并用 568 个主工作流任务评测记忆能否改善真实产物。",
+    "a-mem 的最终产物质量和用户偏好一致性都排第一，但记忆诱发任务率也最高：7.39%，约为 mem0 的 0.35% 的 21 倍；这不能单独归因于记忆量。",
+    "同一记忆组件交给不同执行模型会产生不同结果：记忆系统决定取回什么，模型决定如何解释、验证和执行，可靠性属于整套组合。",
+    "验收 Agent 记忆要同时看三笔账：最终产物是否变好、用户习惯是否延续，以及错误经验或适用范围错配是否制造了新问题。",
+    "工程上应为执行记忆保留来源、形成时间和适用范围，并提供核验、拒绝、失效和追踪能力；相关召回只是起点，可验证的净收益才是目标。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);
