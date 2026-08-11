@@ -109,6 +109,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "验收 Agent 记忆要同时看三笔账：最终产物是否变好、用户习惯是否延续，以及错误经验或适用范围错配是否制造了新问题。",
     "工程上应为执行记忆保留来源、形成时间和适用范围，并提供核验、拒绝、失效和追踪能力；相关召回只是起点，可验证的净收益才是目标。",
   ],
+  "ai-mirror-thinking": [
+    "AI 使用不只是效率选择：当人机分工被写进记忆、规则和自动化，它也会持续影响人保留或停止练习哪些能力。",
+    "52 名软件工程师的实验中，AI 组掌握测验平均 50%，自行编码组为 67%；AI 组只快约两分钟，速度差异没有达到统计显著性。",
+    "依赖式卸载把关键思考交给 AI，自主式卸载让 AI 提供选项、漏洞和解释；默认设置反复执行后，还会把人的既有偏好送回给人。",
+    "AI 更适合接管执行，人则要保留问题定义、证据判断、方向纠偏、发布授权和后果承担。",
+    "审查写进记忆、规则和自动化的默认值：先形成自己的判断，再追原始出处、寻找反例，并确保自己说得清为什么做、凭什么信。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);
