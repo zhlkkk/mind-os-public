@@ -1,0 +1,56 @@
+{
+  "slides": [
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-00-cover.png",
+      "title": "Product Hunt 与 GitHub Trending 双榜 12 个项目"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-01-bumply.png",
+      "title": "Bumply：依赖升级与撤销机制"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-02-localdock.png",
+      "title": "Localdock：本地项目地址映射"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-03-dropstone.png",
+      "title": "Dropstone：记忆学习与技能复用循环"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-04-paymentkit.png",
+      "title": "PaymentKit：多处理器计费连续性"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-05-cortex.png",
+      "title": "Cortex：上下文筛选与关键记忆"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-06-treebar.png",
+      "title": "Treebar：活跃 Git worktree 总览"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-07-free-claude-code.png",
+      "title": "free-claude-code：多提供方与编码 Agent 路由"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-08-ai-job-search.png",
+      "title": "ai-job-search：本地求职申请流水线"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-09-openlogi.png",
+      "title": "OpenLogi：本地 Logitech 设备控制"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-10-apache-maka.png",
+      "title": "Apache Maka：Agent 仅追加事件日志"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-11-claude-obsidian.png",
+      "title": "claude-obsidian：从资料到 Markdown 知识图谱"
+    },
+    {
+      "path": "../assets/articles/2026-08-24-aihot-dual-rankings/xhs-12-awesome-gpt-image-2.png",
+      "title": "awesome-gpt-image-2：提示词代码与模板资产"
+    }
+  ]
+}

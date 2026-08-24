@@ -116,6 +116,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "AI 更适合接管执行，人则要保留问题定义、证据判断、方向纠偏、发布授权和后果承担。",
     "审查写进记忆、规则和自动化的默认值：先形成自己的判断，再追原始出处、寻找反例，并确保自己说得清为什么做、凭什么信。",
   ],
+  "2026-08-24-aihot-dual-rankings": [
+    "这篇文章不是完整榜单，而是从单日双榜中剔除熟面孔，追问 12 个新项目解决什么问题、怎样工作，以及试用前还要核对什么。",
+    "样本来自 2026 年 8 月 24 日 19:00 的 Product Hunt 与 19:15 的 GitHub Trending 快照，各选 6 个项目并保留原始名次。",
+    "Product Hunt 侧聚焦回滚、隧道、持久运行时、支付路由、记忆质量门和 worktree 状态；GitHub 侧聚焦模型路由、本地工作流、设备控制、事件日志、知识编译与提示词资产。",
+    "单日上榜只能说明当时获得关注，不能证明成熟度；涉及支付、密钥、个人资料或设备权限的项目，仍要逐项验证访问控制、回滚、隐私和数据保留边界。",
+    "把这 12 个项目当作进一步调查的入口：先重查官网或 README 的最新主张，再检查安装脚本和权限，并用真实失败场景验证关键机制。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);
