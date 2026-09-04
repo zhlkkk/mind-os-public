@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07111f"/>
+      <stop offset="0.58" stop-color="#0b1830"/>
+      <stop offset="1" stop-color="#101426"/>
+    </linearGradient>
+    <linearGradient id="barhot" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3ec6d8"/>
+      <stop offset="1" stop-color="#63e6ee"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#48d9ff" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#48d9ff" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      text { font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+      .title { font-size: 34px; font-weight: 700; fill: #f5f8ff; letter-spacing: 0.5px; }
+      .subtitle { font-size: 17px; fill: #9aa9c1; }
+      .row { font-size: 16px; fill: #c6d3e6; }
+      .val { font-size: 16px; font-weight: 700; fill: #dce7f6; }
+      .note { font-size: 14px; fill: #92a1b8; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="760" rx="28" fill="url(#bg)"/>
+  <circle cx="860" cy="480" r="300" fill="url(#glow)" opacity="0.55"/>
+  <path d="M0 151 H1200" stroke="#20314a" stroke-width="1"/>
+
+  <text x="72" y="73" class="title">在 Flash 上砍掉 Wiki，技能提议者掉了 15 分</text>
+  <text x="72" y="111" class="subtitle">消融实验，仅 Gemini-3.5-Flash，五个基准平均分｜其他组件全部照旧，只动 Wiki 开关</text>
+  <rect x="930" y="55" width="198" height="38" rx="19" fill="#121f37" stroke="#2b4468"/>
+  <circle cx="956" cy="74" r="6" fill="#ff865f"/>
+  <text x="972" y="80" font-size="14" fill="#b9cae2">Ablation, Table 6</text>
+
+  <!-- grid -->
+  <g stroke="#1d2d44" stroke-width="1">
+    <line x1="380" y1="180" x2="380" y2="640"/>
+    <line x1="555" y1="180" x2="555" y2="640"/>
+    <line x1="730" y1="180" x2="730" y2="640"/>
+    <line x1="905" y1="180" x2="905" y2="640"/>
+    <line x1="1080" y1="180" x2="1080" y2="640"/>
+  </g>
+  <g font-size="13" fill="#8392aa">
+    <text x="380" y="662" text-anchor="middle">30</text>
+    <text x="555" y="662" text-anchor="middle">40</text>
+    <text x="730" y="662" text-anchor="middle">50</text>
+    <text x="905" y="662" text-anchor="middle">60</text>
+    <text x="1080" y="662" text-anchor="middle">70</text>
+  </g>
+
+  <!-- bars: x = 380 + (v-30)*17.5 -->
+  <!-- row 1: baseline 40.4 -> 562 -->
+  <text x="364" y="238" class="row" text-anchor="end">无技能基线</text>
+  <rect x="380" y="212" width="182" height="44" rx="8" fill="#2a3a52"/>
+  <text x="576" y="241" class="val">40.4</text>
+
+  <!-- row 2: reader yes, proposer no 45.3 -> 649 -->
+  <text x="364" y="323" class="row" text-anchor="end">仅推理 Agent 可读 Wiki</text>
+  <rect x="380" y="297" width="269" height="44" rx="8" fill="#2f4a63"/>
+  <text x="663" y="326" class="val">45.3</text>
+
+  <!-- row 3: neither 48.7 -> 707 (orange, the cut) -->
+  <text x="364" y="408" class="row" text-anchor="end">双方都不可（无持久知识）</text>
+  <rect x="380" y="382" width="327" height="44" rx="8" fill="#b25a3c"/>
+  <text x="721" y="411" class="val" fill="#ffb69b">48.7</text>
+
+  <!-- row 4: both 60.9 -> 921 -->
+  <text x="364" y="493" class="row" text-anchor="end">双方都可读 Wiki</text>
+  <rect x="380" y="467" width="541" height="44" rx="8" fill="#3d7f96"/>
+  <text x="935" y="496" class="val">60.9</text>
+
+  <!-- row 5: proposer only (default) 63.7 -> 970 (hot) -->
+  <text x="364" y="578" class="row" text-anchor="end">仅提议者可读（默认配置）</text>
+  <rect x="380" y="552" width="590" height="44" rx="8" fill="url(#barhot)"/>
+  <text x="984" y="581" class="val" fill="#8ff2fa">63.7</text>
+
+  <!-- +15 bracket between row3 and row5 -->
+  <path d="M1040 404 V574" stroke="#ff865f" stroke-width="2.5"/>
+  <path d="M1030 404 H1040 M1030 574 H1040" stroke="#ff865f" stroke-width="2.5"/>
+  <text x="1056" y="478" font-size="26" font-weight="800" fill="#ff9b7a">+15.0</text>
+  <text x="1056" y="504" font-size="14" fill="#c98a72">一个组件的分差</text>
+
+  <!-- insight box -->
+  <rect x="380" y="170" width="0" height="0"/>
+  <rect x="72" y="688" width="1056" height="1" fill="#22344d"/>
+  <text x="72" y="718" class="note">注意：训练时让干活的推理 Agent 也读 Wiki，反而从 63.7 掉到 60.9，轨迹信号被污染。知识要交给管知识的人。</text>
+  <text x="1128" y="718" class="note" text-anchor="end">数据：WikiSkill 消融实验</text>
+</svg>

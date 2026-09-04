@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07111f"/>
+      <stop offset="0.58" stop-color="#0b1830"/>
+      <stop offset="1" stop-color="#101426"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#48d9ff" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#48d9ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="wikiband" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5ee7f2" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#8a8cff" stop-opacity="0.16"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4d6987"/>
+    </marker>
+    <marker id="arrowHot" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#63e6ee"/>
+    </marker>
+    <style>
+      text { font-family: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+      .title { font-size: 34px; font-weight: 700; fill: #f5f8ff; letter-spacing: 0.5px; }
+      .subtitle { font-size: 17px; fill: #9aa9c1; }
+      .layer { font-size: 22px; font-weight: 700; fill: #eef4ff; }
+      .desc { font-size: 15px; fill: #9fb1c9; }
+      .rule { font-size: 15px; font-weight: 600; }
+      .anno { font-size: 15px; fill: #b9cae2; }
+      .annoHead { font-size: 16px; font-weight: 700; fill: #dce7f6; }
+      .note { font-size: 14px; fill: #92a1b8; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="760" rx="28" fill="url(#bg)"/>
+  <circle cx="640" cy="400" r="330" fill="url(#glow)" opacity="0.5"/>
+  <path d="M0 151 H1200" stroke="#20314a" stroke-width="1"/>
+
+  <text x="72" y="73" class="title">经验和技能，被拆成了三层</text>
+  <text x="72" y="111" class="subtitle">WikiSkill 的核心结构｜技能可以回滚，Wiki 永不回滚</text>
+  <rect x="968" y="55" width="160" height="38" rx="19" fill="#121f37" stroke="#2b4468"/>
+  <circle cx="994" cy="74" r="6" fill="#63e6ee"/>
+  <text x="1010" y="80" font-size="14" fill="#b9cae2">WikiSkill v1</text>
+
+  <!-- skills layer -->
+  <g>
+    <rect x="140" y="185" width="600" height="120" rx="18" fill="#0d1a2e" stroke="#2b4468"/>
+    <text x="176" y="233" class="layer">skills 技能层</text>
+    <text x="176" y="263" class="desc">可执行的技能文件，推理 Agent 干活时全文注入</text>
+    <rect x="176" y="276" width="238" height="24" rx="12" fill="#241a20" stroke="#814a46"/>
+    <text x="192" y="293" class="rule" fill="#ff9b7a">验证不过，可以回滚</text>
+  </g>
+
+  <!-- arrow skills->wiki : revise -->
+  <path d="M560 305 V335" stroke="#63e6ee" stroke-width="2.5" marker-end="url(#arrowHot)"/>
+  <text x="580" y="327" class="desc" fill="#8fe9f2">凭 Wiki 修订技能</text>
+
+  <!-- wiki layer (highlighted) -->
+  <g>
+    <rect x="140" y="340" width="600" height="130" rx="18" fill="url(#wikiband)" stroke="#63e6ee" stroke-width="1.6"/>
+    <text x="176" y="388" class="layer" fill="#aef4fa">wiki 持久知识层</text>
+    <text x="176" y="418" class="desc">失败模式、成功策略、演化日志、技能影响追踪</text>
+    <rect x="176" y="431" width="252" height="24" rx="12" fill="#12293a" stroke="#2f7c8c"/>
+    <text x="192" y="448" class="rule" fill="#63e6ee">只增不减，永不回滚</text>
+  </g>
+
+  <!-- arrow raw->wiki : compile -->
+  <path d="M440 525 V495" stroke="#63e6ee" stroke-width="2.5" marker-end="url(#arrowHot)"/>
+  <text x="300" y="516" class="desc" fill="#8fe9f2" text-anchor="end">把轨迹编译成结构化知识</text>
+
+  <!-- raw layer -->
+  <g>
+    <rect x="140" y="525" width="600" height="110" rx="18" fill="#0b1424" stroke="#22344d"/>
+    <text x="176" y="572" class="layer" fill="#c6d3e6">raw 原始轨迹层</text>
+    <text x="176" y="602" class="desc">每轮执行的完整轨迹：推理、工具调用、输出</text>
+    <text x="176" y="626" class="desc" fill="#7e8ea6">不可变，写完就归档</text>
+  </g>
+
+  <!-- side loop: execution produces traces -->
+  <path d="M140 245 H84 V580 H140" fill="none" stroke="#4d6987" stroke-width="2" stroke-dasharray="6 8" marker-end="url(#arrow)"/>
+  <text x="60" y="408" class="desc" fill="#8ea0bb" transform="rotate(-90 60 408)" text-anchor="middle">戴着技能去执行，产生新轨迹</text>
+
+  <!-- right annotations -->
+  <g>
+    <rect x="790" y="185" width="338" height="130" rx="16" fill="#0d1a2e" stroke="#22344d"/>
+    <text x="816" y="224" class="annoHead">执行时</text>
+    <text x="816" y="254" class="anno">推理 Agent 只读技能层，</text>
+    <text x="816" y="280" class="anno">看不到 Wiki，抄不到答案</text>
+  </g>
+  <g>
+    <rect x="790" y="340" width="338" height="130" rx="16" fill="#0d1a2e" stroke="#22344d"/>
+    <text x="816" y="379" class="annoHead">演化时</text>
+    <text x="816" y="409" class="anno">提议者对着 raw 写 Wiki，</text>
+    <text x="816" y="435" class="anno">再凭 Wiki 改技能</text>
+  </g>
+  <g>
+    <rect x="790" y="495" width="338" height="140" rx="16" fill="#171322" stroke="#4a3f6e"/>
+    <text x="816" y="534" class="annoHead" fill="#c9b8ff">关键规则</text>
+    <text x="816" y="564" class="anno">提案被否决，教训照样留下；</text>
+    <text x="816" y="590" class="anno">试错成本，变成信息资产</text>
+  </g>
+
+  <rect x="72" y="688" width="1056" height="1" fill="#22344d"/>
+  <text x="72" y="718" class="note">类比：你的笔记软件里，原始素材、结构化笔记、可复用模板，也是这三层。</text>
+  <text x="1128" y="718" class="note" text-anchor="end">结构：WikiSkill Figure 1</text>
+</svg>

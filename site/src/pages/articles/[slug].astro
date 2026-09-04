@@ -123,6 +123,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "单日上榜只能说明当时获得关注，不能证明成熟度；涉及支付、密钥、个人资料或设备权限的项目，仍要逐项验证访问控制、回滚、隐私和数据保留边界。",
     "把这 12 个项目当作进一步调查的入口：先重查官网或 README 的最新主张，再检查安装脚本和权限，并用真实失败场景验证关键机制。",
   ],
+  "agent-replays-human-knowledge": [
+    "WikiSkill 要解决的不是再堆一层记忆，而是把原始轨迹、永不回滚的 Wiki 和可执行技能拆开：知识和技能必须分开编译。",
+    "五个基准平均分里，带演化技能的 Qwen-3.5-9B 是 47.4%，超过无技能的 Qwen-3.6-27B 的 39.4%；27B 带上 WikiSkill 到 63.3%，相对最强竞品从 +3.3 到 +12.0。",
+    "执行时推理 Agent 只戴技能；演化时另一组角色对着 raw 写 Wiki 再改技能。Flash 消融里，技能提议者没有 Wiki 是 48.7 分，有 Wiki 是 63.7 分；让干活的人也能读 Wiki 反而掉到 60.9。",
+    "技能可以正迁移，也会负迁移：27B 的表格技能让 9B 干到 50.5%，4B 的表格 workaround 把 Flash 从 50.5% 拖到 18.1%。Auto Memory 和 Record & Replay 是同构零件，但缺验证门控和只增不减。",
+    "给 Agent 养记忆时先改三件事：失败写进 wiki/ 且只增不减；改 skills/ 先验证，不过就回滚；每条经验写上适用边界，完整轨迹留在 raw/。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);
