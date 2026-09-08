@@ -130,6 +130,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "技能可以正迁移，也会负迁移：27B 的表格技能让 9B 干到 50.5%，4B 的表格 workaround 把 Flash 从 50.5% 拖到 18.1%。Auto Memory 和 Record & Replay 是同构零件，但缺验证门控和只增不减。",
     "给 Agent 养记忆时先改三件事：失败写进 wiki/ 且只增不减；改 skills/ 先验证，不过就回滚；每条经验写上适用边界，完整轨迹留在 raw/。",
   ],
+  "3-1-vs-36": [
+    "OpenAI 的 3.1 和 Meta 的 220% 对 36%，说的是同一条缝：先被撑起来的是工时和代码量，还没被撑起来的是交到用户手里的东西，以及出了事谁来收。",
+    "OpenAI 研究部门平均每 1 个人类工作日对应 3.1 个 Agent 工作日；Meta 内部平台与基础设施代码变更 +220%，用户可见新功能或升级只 +36%，重大技术与安全事故 +40%，救火时间 +70%。",
+    "3.1 量的是运行时长，不是论文、上线功能或组织产能；220% 是中间产物变厚，36% 是交付没有按同样斜率上涨。OpenAI 把 Agent 当研究加速器，Meta 则按工时去替代一部分工程岗位。",
+    "3.1 倍工时减不掉 3.1 倍的人：长任务过半仍要人工干预，规划权还在人手里。仓库更吵、PR 更多可以被记成效率，但用户看见的功能、事故和救火时间才是交付。",
+    "评审时把活动量和交付量分开报，对照最近三个月用户可见功能增长率能否跑赢仓库代码变更增长率；Agent 可以接走工单，不能接走方向。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);
