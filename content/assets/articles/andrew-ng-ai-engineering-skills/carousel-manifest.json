@@ -1,0 +1,36 @@
+{
+  "slides": [
+    {
+      "path": "../assets/articles/andrew-ng-ai-engineering-skills/00-cover.png",
+      "title": "封面：写代码变便宜了，真正值钱的是这 4 项能力"
+    },
+    {
+      "path": "../assets/articles/andrew-ng-ai-engineering-skills/01-overview.png",
+      "title": "一张图看懂 2026 AI 工程四根柱子"
+    },
+    {
+      "path": "../assets/articles/andrew-ng-ai-engineering-skills/02-pillar-1-build-deploy.png",
+      "title": "支柱 01：把不可预测的零件做成还能上线的系统"
+    },
+    {
+      "path": "../assets/articles/andrew-ng-ai-engineering-skills/03-pillar-2-engineering-fundamentals.png",
+      "title": "支柱 02：Agent 写代码之后，取舍仍要人来选"
+    },
+    {
+      "path": "../assets/articles/andrew-ng-ai-engineering-skills/04-pillar-3-coding-agent.png",
+      "title": "支柱 03：会用 Coding Agent，且进化最快"
+    },
+    {
+      "path": "../assets/articles/andrew-ng-ai-engineering-skills/05-pillar-4-shaping-build.png",
+      "title": "支柱 04：Spec 从哪来，比怎么落地更贵"
+    },
+    {
+      "path": "../assets/articles/andrew-ng-ai-engineering-skills/06-scarcity-timeline.png",
+      "title": "稀缺性一直在上移：2022 / 2024 / 2026"
+    },
+    {
+      "path": "../assets/articles/andrew-ng-ai-engineering-skills/07-how-to-use.png",
+      "title": "怎么用这张图：对照自己的三问"
+    }
+  ]
+}
