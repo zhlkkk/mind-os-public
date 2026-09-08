@@ -5,6 +5,8 @@ import { marked } from "marked";
 const repoRoot = resolve(process.cwd(), "..");
 const articlesDir = resolve(repoRoot, "content/articles");
 
+export const ARTICLE_PAGE_SIZE = 10;
+
 export type ArticleFrontmatter = {
   title: string;
   slug: string;
@@ -13,6 +15,7 @@ export type ArticleFrontmatter = {
   summary: string;
   cover?: string;
   carousel?: string[];
+  pinned?: boolean;
   tags: string[];
   discussion?: {
     issue?: number;
@@ -51,7 +54,19 @@ export function getArticles(): Article[] {
     .filter((file) => file.endsWith(".md") && file !== ".gitkeep")
     .map((file) => readArticle(join(articlesDir, file)))
     .filter((article) => article.frontmatter.status !== "draft" && article.frontmatter.status !== "archived")
-    .sort((a, b) => b.frontmatter.date.localeCompare(a.frontmatter.date));
+    .sort(compareArticlesForList);
+}
+
+export function getLatestArticle(): Article | undefined {
+  return getArticles()
+    .slice()
+    .sort((a, b) => b.frontmatter.date.localeCompare(a.frontmatter.date))[0];
+}
+
+function compareArticlesForList(a: Article, b: Article): number {
+  const pin = Number(Boolean(b.frontmatter.pinned)) - Number(Boolean(a.frontmatter.pinned));
+  if (pin !== 0) return pin;
+  return b.frontmatter.date.localeCompare(a.frontmatter.date);
 }
 
 export function getArticleBySlug(slug: string): Article | undefined {
@@ -127,13 +142,16 @@ function parseFrontmatter(source: string, fallbackSlug: string): ArticleFrontmat
     summary: data.summary ?? "",
     cover: typeof data.cover === "string" ? data.cover : undefined,
     carousel: Array.isArray(data.carousel) ? data.carousel : [],
+    pinned: data.pinned === true,
     tags: Array.isArray(data.tags) ? data.tags : [],
     discussion: data.discussion ?? {},
     formats: data.formats ?? {},
   };
 }
 
-function parseValue(value: string): string | number | string[] {
+function parseValue(value: string): string | number | boolean | string[] {
+  if (value === "true") return true;
+  if (value === "false") return false;
   if (/^\d+$/.test(value)) return Number(value);
 
   if (value.startsWith("[") && value.endsWith("]")) {

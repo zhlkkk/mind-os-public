@@ -197,4 +197,24 @@ for (const asset of ["cover.png", "contextweave-benefit-risk.png", "contextweave
   }
 }
 
+const home = readFileSync(path.join(distRoot, "index.html"), "utf8");
+const articleList = home.match(/<div class="article-list">[\s\S]*?<\/div>/)?.[0] ?? "";
+const listedTitles = Array.from(articleList.matchAll(/<strong>([\s\S]*?)<\/strong>/g)).map((match) =>
+  match[1].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim(),
+);
+
+assert.ok(
+  listedTitles[0]?.endsWith("从 LLM Wiki 到个人 Harness——一个开发者的私域知识沉淀实践"),
+  "置顶文章应排在首页列表第一位",
+);
+assert.match(home, /class="pin-badge">置顶<\/span>/);
+assert.match(home, /class="pagination"/);
+assert.match(home, /href="\/2\/#articles"/);
+assert.ok(existsSync(path.join(distRoot, "2", "index.html")), "缺少文章列表第二页");
+
+const pageTwo = readFileSync(path.join(distRoot, "2", "index.html"), "utf8");
+assert.doesNotMatch(pageTwo, /从 LLM Wiki 到个人 Harness——一个开发者的私域知识沉淀实践/);
+assert.match(pageTwo, /class="pagination"/);
+assert.match(pageTwo, /href="\/#articles"/);
+
 console.log("构建产物校验通过：文章、速读摘要、讨论入口与公开资源均完整。");
