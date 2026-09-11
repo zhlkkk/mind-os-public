@@ -144,6 +144,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "3.1 倍工时减不掉 3.1 倍的人：长任务过半仍要人工干预，规划权还在人手里。OpenAI 停掉的是 office hours，研究员还在；Meta 多出来的救火时间是 +70%，不是 -70%。",
     "评审时把活动量和交付量分开报，不要把 PR 数、提交数报成效率。工单可以被 Agent 接走，方向不能。",
   ],
+  "2026-09-10-cognition-devin-480b": [
+    "Cognition E 轮估值冲到 480 亿，真正扎眼的不是翻倍，而是大规模被点名的买单方仍是芯片厂、银行、车企、航天机构和军队，互联网公司没有站在第一排。",
+    "公开数字里：融资超过 20 亿美元、投后 480 亿（四个月前 260 亿）；奔驰试点约 20 万行 COBOL 从预估 8 个月压到 8 天；Nubank 迁移工时约降 12 倍；Itaú 约 70% 漏洞自动修掉；SWE-1.7 单任务成本 1.97 美元。",
+    "Devin 默认假设你不在场：任务跑在隔离云虚拟机里，自己改代码、跑测试、交 PR。监管严、流程死、文档全、验收明确的活，刚好满足 Agent 能上场的边界。",
+    "开源 harness 把「造一个能干活的 agent」门槛砸下去了，但护城河不在能力层，而在托管执行、单位经济，以及证据链、合规和合同责任这些让人敢不看的交付层。",
+    "评估任何 agent 先问默认姿态假设你在不在场；团队 backlog 里能写成可验收任务的那部分，才是今天能交出去的部分。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);
