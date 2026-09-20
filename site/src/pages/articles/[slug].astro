@@ -151,6 +151,13 @@ const speedReadBySlug: Record<string, string[]> = {
     "开源 harness 把「造一个能干活的 agent」门槛砸下去了，但护城河不在能力层，而在托管执行、单位经济，以及证据链、合规和合同责任这些让人敢不看的交付层。",
     "评估任何 agent 先问默认姿态假设你在不在场；团队 backlog 里能写成可验收任务的那部分，才是今天能交出去的部分。",
   ],
+  "jev-system-one": [
+    "这篇文章的核心判断是：生产 AI 的最大浪费可能不是模型不够强，而是大量只需要带概率枚举的调用，被拿去跑完整套自回归生成。",
+    "关键数据：输入 $0.042/百万 token、输出免费、延迟 70–500ms；Every 实测 777 次判断 0.7 秒约 0.25 美分，但准确率 6/7 对 Fable 的 7/7。",
+    "机制上 Jev 只回答三种题：Choice 从声明集合选一个、Score 按量表打分、Noul 给 0–1 校准概率；schema 保证类型安全，但不会把「判断税」砍掉。",
+    "工程判断：Jev 是智能 if 语句，不是智能同事——路由、打分、护栏、批量打标适合下沉到 System One，生成、推理仍留给 LLM；类型安全不等于事实正确。",
+    "行动建议：不要 all-in 换模型，先盘一次自己的 LLM 账单，数清有多少调用其实是分类、路由、打分、是否——那一截才是这类模型的战场。",
+  ],
 };
 const speedReadPoints = speedReadBySlug[article.frontmatter.slug] ?? [article.frontmatter.summary];
 const coverSrc = assetHref(article.frontmatter.cover);
