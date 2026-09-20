@@ -106,7 +106,7 @@ Jev 是 TypeSafe 发布的第一款 System One Model：给软件用的决策模�
 
 ---
 
-## 和 LLM 差在哪
+## 和 LLM 区别在哪
 
 | | 现有前沿 LLM | System One + Jev |
 |---|---|---|
